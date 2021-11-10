@@ -1,0 +1,10 @@
+echo harbor-log:v2.3.3; docker save goharbor/harbor-log:v2.3.3 -o /data/harbor-bin/harbor-images/harbor-log:v2.3.3
+echo registry-photon:v2.3.3; docker save goharbor/registry-photon:v2.3.3 -o /data/harbor-bin/harbor-images/registry-photon:v2.3.3
+echo harbor-registryctl:v2.3.3; docker save goharbor/harbor-registryctl:v2.3.3 -o /data/harbor-bin/harbor-images/harbor-registryctl:v2.3.3
+echo harbor-db:v2.3.3; docker save goharbor/harbor-db:v2.3.3 -o /data/harbor-bin/harbor-images/harbor-db:v2.3.3
+echo harbor-core:v2.3.3; docker save goharbor/harbor-core:v2.3.3 -o /data/harbor-bin/harbor-images/harbor-core:v2.3.3
+echo harbor-portal:v2.3.3; docker save goharbor/harbor-portal:v2.3.3 -o /data/harbor-bin/harbor-images/harbor-portal:v2.3.3
+echo harbor-jobservice:v2.3.3; docker save goharbor/harbor-jobservice:v2.3.3 -o /data/harbor-bin/harbor-images/harbor-jobservice:v2.3.3
+echo redis-photon:v2.3.3; docker save goharbor/redis-photon:v2.3.3 -o /data/harbor-bin/harbor-images/redis-photon:v2.3.3
+echo nginx-photon:v2.3.3; docker save goharbor/nginx-photon:v2.3.3 -o /data/harbor-bin/harbor-images/nginx-photon:v2.3.3
+echo goharbor/prepare:v2.3.3; docker save goharbor/prepare:v2.3.3 -o /data/harbor-bin/harbor-images/goharbor_prepare:v2.3.3

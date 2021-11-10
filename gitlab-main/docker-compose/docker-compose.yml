@@ -1,0 +1,22 @@
+web:
+  image: 'gitlab/gitlab-ce:latest'
+  restart: always
+  hostname: 'gitlab2.lab.pcfdemo.net'
+  environment:
+    GITLAB_OMNIBUS_CONFIG: |
+      external_url 'https://gitlab2.lab.pcfdemo.net'
+      #external_url 'http://gitlab2.lab.pcfdemo.net'
+      # Add any other gitlab.rb configuration here, each on its own line
+      gitlab_rails['initial_root_password'] = 'VMware1!'
+      gitlab_rails['display_initial_root_password'] = true
+      letsencrypt['enable'] = false
+      gitlab_rails['gitlab_shell_ssh_port'] = 2222
+  ports:
+    - '80:80'
+    - '443:443'
+    # - '22:22'
+    - '2222:22'
+  volumes:
+    - '/data/gitlab-data/config:/etc/gitlab'
+    - '/data/gitlab-data/logs:/var/log/gitlab'
+    - '/data/gitlab-data/data:/var/opt/gitlab'
