@@ -100,4 +100,11 @@ apt download libpam-modules-bin
 dpkg -i *.deb
 move_download bind9
 
+prepare_dir net-tools
+cd $(get_download_tmp_path net-tools)
+apt download net-tools
+apt download $( apt-rdepends net-tools| grep -v "^ "| grep -v "debconf-2.0")
+dpkg -i *.deb
+move_download net-tools
+
 echo "complated ==========================================="
