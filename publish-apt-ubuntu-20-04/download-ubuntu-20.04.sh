@@ -107,4 +107,10 @@ apt download $( apt-rdepends net-tools| grep -v "^ "| grep -v "debconf-2.0")
 dpkg -i *.deb
 move_download net-tools
 
+prepare_dir ntpdate
+cd $(get_download_tmp_path ntpdate)
+apt download ntpdate
+apt download $( apt-rdepends ntpdate| grep -v "^ "| grep -v "debconf-2.0")
+dpkg -i *.deb
+move_download ntpdate
 echo "complated ==========================================="
