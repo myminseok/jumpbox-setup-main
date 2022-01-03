@@ -1,0 +1,3 @@
+*.tar
+./minio-main/docker-compose/docker-images/*.tar
+
