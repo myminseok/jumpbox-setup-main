@@ -113,4 +113,13 @@ apt download ntpdate
 apt download $( apt-rdepends ntpdate| grep -v "^ "| grep -v "debconf-2.0")
 dpkg -i *.deb
 move_download ntpdate
+
+prepare_dir jq
+cd $(get_download_tmp_path jq)
+apt download jq
+apt download $( apt-rdepends jq| grep -v "^ "| grep -v "debconf-2.0")
+dpkg -i *.deb
+move_download jq
+
 echo "complated ==========================================="
+`
