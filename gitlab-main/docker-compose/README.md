@@ -1,4 +1,4 @@
-# How to run gitlab with docker-compose on jumpbox VM in airgapped env.
+# How to run gitlab in air-gapped env.
 
 ## On internet facing Network
 
