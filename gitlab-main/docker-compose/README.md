@@ -87,6 +87,7 @@ web:
 8. run docker-compose
 ```
 docker-compose up -d
+docker-compose ps
 ```
 9. configure DNS or /etc/hosts
 ```
