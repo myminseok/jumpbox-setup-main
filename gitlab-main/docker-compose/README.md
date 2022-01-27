@@ -1,32 +1,36 @@
 # How to run gitlab with docker-compose on jumpbox VM in airgapped env.
 
-## prepare VM
+## On internet facing Network
+
+1. prepare VM by following [preparing jumpbox VM](https://github.com/myminseok/jumpbox-setup-main/blob/main/offline/jumpbox.md)
 - ubuntu 20.04
 - docker engine installed
 
-## On internet facing VM
+2. download gitlab docker image
 ```
 git clone https://github.com/myminseok/jumpbox-setup-main
 cd gitlab-main/docker-compose
 
 docker save gitlab/gitlab-ce:latest -o ./gitlab-ce_latest
 ```
-copy director `gitlab-main/docker-compose` to internal VM.
+3. copy director `gitlab-main/docker-compose` to internal VM.
 
 ## On internal VM.
-
-### installation parameters
+1. design installation parameters
 - gitlab domain: gitlab.lab.pcfdemo.net
 - jumpbox IP where the gitlab docker-compose will be running: 192.168.0.6 
 - gitlab data root folder: /data/gitlab-data
-- 
-### load docker image
-```
-cd gitlab-main/docker-compose
-docker load -i ./gitlab-ce_latest
+ 
+2. prepare VM by following [preparing jumpbox VM](https://github.com/myminseok/jumpbox-setup-main/blob/main/offline/jumpbox.md)
+- ubuntu 20.04
+- docker engine installed
 
+3. load docker image
 ```
-### generate self-signed certs
+cd ./gitlab-main/docker-compose
+docker load -i ./gitlab-ce_latest
+```
+4. generate self-signed certs
 ```
 vi gitlab-main/docker-compose/generate-self-signed-cert/openssl-domain.conf
 
@@ -38,13 +42,12 @@ IP.2 = 192.168.0.6
 > DNS.1 : domain name for gitlab server.
 > IP.2. : put jumpbox IP where the gitlab docker-compose will be running.
 
-generate certs by running generate.sh
+5. generate certs by running generate.sh
 ```
 cd gitlab-main/docker-compose/generate-self-signed-cert/
 ./generate.sh
 ```
-
-copy certs to gitlab data folder.
+6. copy certs to gitlab data folder.
 ```
 mkdir -p /data/gitlab-data/config/ssl
 cd ./gitlab-main/docker-compose
@@ -52,8 +55,7 @@ cp  ./generate-self-signed-cert/domain.crt /data/gitlab-data/config/ssl/gitlab.l
 cp  ./generate-self-signed-cert/domain.key /data/gitlab-data/config/ssl/gitlab.lab.pcfdemo.net.key
 ```
 
-### run docker-compose
-edit docker-compose.yml
+7. edit docker-compose.yml
 ```
 cd ./gitlab-main/docker-compose
 vi ./docker-compose.yml
@@ -82,16 +84,15 @@ web:
     - '/data/gitlab-data/data:/var/opt/gitlab'
   ```
   
-run docker-compose
+8. run docker-compose
 ```
 docker-compose up -d
 ```
-configure DNS or /etc/hosts
+9. configure DNS or /etc/hosts
 ```
 192.168.0.5 gitlab.lab.pcfdemo.net
 ```
-
-access gitlab
+10. access gitlab
 ```
 open https://gitlab.lab.pcfdemo.net
 ```
