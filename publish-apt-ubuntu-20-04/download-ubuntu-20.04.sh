@@ -122,4 +122,4 @@ dpkg -i *.deb
 move_download jq
 
 echo "complated ==========================================="
-`
+
