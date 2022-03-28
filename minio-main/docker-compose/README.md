@@ -38,6 +38,32 @@ or
 ```sh
 docker stack deploy --compose-file docker-compose.yaml minio
 ```
+or
+```
+wget https://dl.min.io/server/minio/release/linux-amd64/minio
+chmod +x minio
+./minio server /data
+
+nohup ./minio  server /minio --console-address ":9001" &
+
+
+
+API: http://10.90.13.234:9000  http://172.17.0.1:9000  http://127.0.0.1:9000
+RootUser: minioadmin
+RootPass: minioadmin
+
+Console: http://10.90.13.234:33255 http://172.17.0.1:33255 http://127.0.0.1:33255
+RootUser: minioadmin
+RootPass: minioadmin
+
+Command-line: https://docs.min.io/docs/minio-client-quickstart-guide
+   $ mc alias set myminio http://10.90.13.234:9000 minioadmin minioadmin
+
+Documentation: https://docs.min.io
+
+WARNING: Console endpoint is listening on a dynamic port (33255), please use --console-address ":PORT" to choose a static port.
+
+```
 
 Distributed instances are now accessible on the host at ports 9000, proceed to access the Web browser at http://127.0.0.1:9000/. Here 4 MinIO server instances are reverse proxied through Nginx load balancing.
 
