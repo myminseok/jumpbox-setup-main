@@ -1,0 +1,4 @@
+size: 100Gi
+resources:
+  requests:
+    memory: 1Gi

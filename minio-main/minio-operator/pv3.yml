@@ -1,0 +1,14 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: minio-pv3
+  labels:
+    type: local
+spec:
+  storageClassName: local-storage 
+  capacity:
+    storage: 25Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
