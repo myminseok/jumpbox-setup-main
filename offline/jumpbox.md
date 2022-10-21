@@ -436,6 +436,9 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io -y
 sudo docker run hello-world
 sudo docker ps -a
 
+# give permission to access docker to `ubuntu` account.
+sudo usermod -aG docker ubuntu
+
 
 ```
 
