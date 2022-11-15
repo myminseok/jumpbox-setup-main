@@ -170,6 +170,11 @@ please note that, To get IP assigned properly, the new NIC should be configured 
   5. check the IP assngned: ifconfig
 
 
+
+### mount disk
+https://github.com/myminseok/pivotal-docs/blob/master/offline/jumpbox.md
+
+
 #### Delete VM (9-vm-destroy.sh)
 you may delete VM info with following command.
 ```
