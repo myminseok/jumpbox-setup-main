@@ -3,7 +3,6 @@
 ## the VM should be powered on.
 
 SCRIPTDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-source $SCRIPTDIR/govc.env
 source $SCRIPTDIR/common.sh
 
 check_executable "expect"

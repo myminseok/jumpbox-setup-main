@@ -1,6 +1,6 @@
 #!/bin/bash
 SCRIPTDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-source $SCRIPTDIR/govc.env
+
 source $SCRIPTDIR/common.sh
 
 if [ "$1" == "-h" ]; then

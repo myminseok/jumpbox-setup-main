@@ -3,8 +3,10 @@
 #set -x
 set -e
 SCRIPTDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-source $SCRIPTDIR/vm-deployment.env
-#echo "Using params from $SCRIPTDIR/vm-deployment.env"
+ENV_DIR=${ENV_DIR:-$SCRIPTDIR/env-template}
+echo "Using env from '$ENV_DIR'"
+source $ENV_DIR/vm-deployment.env
+source $ENV_DIR/govc.env
 
 function check_executable {
   if ! command -v $1 &> /dev/null

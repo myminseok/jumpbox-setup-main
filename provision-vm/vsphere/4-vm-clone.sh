@@ -1,6 +1,5 @@
 #!/bin/bash
 SCRIPTDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-source $SCRIPTDIR/govc.env
 source $SCRIPTDIR/common.sh
 
 VM_OVA_FILE=$(basename $VM_OVA_SOURCE_URL)

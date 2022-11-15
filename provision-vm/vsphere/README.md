@@ -20,11 +20,17 @@ clone this project repo.
 cd ~/Downloads
 git clone https://github.com/vmware-tanzu-labs/tanzu-preflight-system
 
+
 ```
 go to script directory for the target cloud. for example, following folder for `vsphere` cloud
 ```
 cd tanzu-preflight-system/scripts/provision-vm/vsphere
+
+cp -r env-template /tmp/provision-vm-dev
+export ENV_DIR=/tmp/provision-vm-dev
+
 ```
+
 edit `vm-deployment.env` file
 ```
 ## set to proper location to save the downloaded ova file. ie) '/tmp'
