@@ -8,6 +8,14 @@ echo "Using env from '$ENV_DIR'"
 source $ENV_DIR/vm-deployment.env
 source $ENV_DIR/govc.env
 
+echo "TIP: customizing env"
+echo "  cp -r env-template /tmp/env-dev"
+echo "  export ENV_DIR=/tmp/env-dev"
+echo ""
+echo "  then run script "
+echo ""
+
+
 function check_executable {
   if ! command -v $1 &> /dev/null
   then
