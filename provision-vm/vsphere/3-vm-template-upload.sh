@@ -50,7 +50,7 @@ replace_json_element "--arg newValue '$VM_OVA_TEMPLATE' '.Name=\$newValue'"
 ## below code only valid for ubuntu-18.04-server-cloudimg-amd64.ova. not for the OVA using cloud-init such as Tanzu OVA(photon, ubuntu)
 if ! is_vmware_tanzu_ova $VM_OVA_TEMPLATE; then
   echo "Additional OVA options such as network, ssh key , password for ubuntu 64-bit Cloud image ..."
-  replace_json_element "--arg newValue '$VM_NETWORK' '.NetworkMapping[].Name=\$newValue'"
+  ##replace_json_element "--arg newValue '$VM_NETWORK' '.NetworkMapping[].Name=\$newValue'"
   replace_json_element "--arg newValue '$VM_NETWORK' '.NetworkMapping[].Network=\$newValue'"
   replace_json_element "--arg newValue '$VM_PASSWORD_TEMP'  '.PropertyMapping=[.PropertyMapping[] | if .Key==\"password\" then .Value=\$newValue else . end]'"
   replace_json_element "--arg newValue '$VM_SSH_PUBLIC_KEY' '.PropertyMapping=[.PropertyMapping[] | if .Key==\"public-keys\" then .Value=\$newValue else . end]'"
