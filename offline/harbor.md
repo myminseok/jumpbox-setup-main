@@ -1,139 +1,101 @@
-## Deploy Harbor via BOSH
 
-- https://github.com/vmware/harbor-boshrelease
+# Harbor( docker-compose)
 
-### Download 
+## Preerquisites
+- docker-compose
 ```
-as ubuntu
-git clone git@github.com:vmware/harbor-boshrelease.git
-
-wget -O harbor-boshrelease.git.zip  https://github.com/vmware/harbor-boshrelease/archive/master.zip
-
-wget -O harbor.release-1.7.5-build.10 https://bosh.io/d/github.com/vmware/harbor-boshrelease?v=1.7.5-build.10
-
-wget -O ubuntu.xenial  https://bosh.io/d/stemcells/bosh-vsphere-esxi-ubuntu-xenial-go_agent?v=250.29
-
-wget -O bosh-dns-release.0.1.3 https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=0.1.3
-
-
+/data/harbor-main/harbor# docker-compose version
+docker-compose version 1.26.2, build unknown
+docker-py version: 4.4.4
+CPython version: 2.7.17
+OpenSSL version: OpenSSL 1.1.1  11 Sep 2018
 ```
-
-
-### vi manifests/runtime-config-bosh-dns.yml
-- include, exclude 설명 참고: https://bosh.io/docs/runtime-config/
-
-```
-addons:
-- include:
-    deployments:
-    - harbor-deployment
-  exclude:
-    deployments:
-    - minio
-  jobs:
-```
-
-```
-bosh -n update-runtime-config manifests/runtime-config-bosh-dns.yml 
-bosh  runtime-config
-
-```
-
-
-## /manifests/harbor.yml
-
-- release : delete url, hash 
-- stemcell: version -> latest
-- deployment-network -> your network in cloud-config
-- az -> your az in cloud config
-- 필요시 deployment명 수정. 이때 addons.jobs.properties.aliaes도 수정해야함.
-- Fix smoke test failure in bosh release:
-
-```
-instance_groups:
-- name: harbor-app
-  ...
-  jobs:
-  - name: harbor
-    release: harbor-container-registry
-    properties:
-      admin_password_for_smoketest: ((harbor_admin_password_for_smoketest))
-
-...
-
-variables:
-- name: harbor_admin_password_for_smoketest
-  type: password
-
-```
-
-##  harbor 배포
-```
-bosh -n -d harbor-deployment deploy manifests/harbor.yml -v hostname=harbor.my.local
-```
-
-
-## harbor account
-
-find in creds.yml
-```
-bosh int ./creds.yml --path /harbor_admin_password
-xxxxxx
-
-Succeeded
-```
-or
-
-```
-/var/vcap/jobs/harbor/config/harbor.cfg:harbor_admin_password = 
-=> admin / xxxx
-
-
-https://harbor.my.local/harbor/projects
-
-```
-
-# DNS
-
-harbor.my.local -> harbor-app VM IP.
-
-test
-```
-$ nc -zv harbor.pksdemo.net 443
-Connection to harbor.pksdemo.net 443 port [tcp/https] succeeded!
-```
-
-# 샘플 docker image ubuntu 업로드/다운로드 테스트
-
+- should setup as ROOT and run as root.
 ```
 sudo su
-docker pull ubuntu
-docker save ubuntu.docker.image
+```
+
+## download
+https://github.com/goharbor/harbor/releases
+```
+wget https://github.com/goharbor/harbor/releases/download/v2.3.3/harbor-offline-installer-v2.3.3.tgz
+
+tar xf harbor-offline-installer-v2.3.3.tgz
+```
+
+## download scripts
+```
+git clone https://github.com/myminseok/jumpbox-setup-main
+```
+
+## generate domain certificates
+
+```
+cd jumpbox-setup-main/harbor-main/generate-self-signed-cert-new
+```
+edit csr.conf
+```
+
+CN = pcfdemo.net
+```
+and generate.sh
+
+## harbor.yml
+```
+cp harbor.yml.tmpl harbor.yml
+```
+
+##  HTTPS 
+https://goharbor.io/docs/2.0.0/install-config/configure-https/
+
+```
+https:
+  # https port for harbor, default is 443
+  port: 443
+  # The path of cert and key files for nginx
+  certificate: /data/harbor-main/generate-self-signed-cert-new/domain.crt
+  private_key: /data/harbor-main/generate-self-signed-cert-new/domain.key
+```
+
+```
+sudo ./install.sh
+
+sudo chown -R ubuntu:ubuntu /data/
+
+docker-compose up
+```
 
 
-sudo su
+# troubleshooting
 
-docker load -i ubuntu.docker.image
-docker tag ubuntu harbor.my.local/dojo/ubuntu
+## wget download failure
+```
+wget https://cli.run.pivotal.io/stable?release=debian64&source=github
 
-https://docs.docker.com/registry/insecure/
-cat /etc/docker/daemon.json 
-{
-  "insecure-registries" : ["harbor.my.local"]
-}
+root@DojoJump:/etc/ssl# --2019-04-09 16:29:55-- https://cli.run.pivotal.io/stable?release=debian64
+Resolving cli.run.pivotal.io (cli.run.pivotal.io)... 34.204.136.114, 34.194.131.211
+Connecting to cli.run.pivotal.io (cli.run.pivotal.io)|34.204.136.114|:443... connected.
+ERROR: cannot verify cli.run.pivotal.io's certificate, issued by emailAddress=admin@abc.com,CN=ABC,OU=ABC,O=ABC,L=ABC,ST=ABC,C=KR:
+Self-signed certificate encountered.
+To connect to cli.run.pivotal.io insecurely, use `--no-check-certificate'
 
+```
 
-vi /etc/hosts
-<harbor IP> harbor.local 
+## how to import ABC corp certificate
+```
+1) export ABC corp cert(DER format)
+2) copy to External jumpbox (ubuntu)
+3) convert DER to PEM
 
-systemctl restart docker.service
+openssl x509 -inform der -outform pem -in ABC.cer -out ABC.pem
 
-docker login harbor.my.local -u admin  -p xxxx
+4) cp ABC.pem /usr/local/share/ca-certificates/ABC.crt
+Please note that the certificate filenames have to end in .crt, otherwise the update-ca-certificates script won't pick up on them.
 
-docker push harbor.my.local/dojo/ubuntu
+5) root@DojoJump:/etc/ssl# update-ca-certificates
+Updating certificates in /etc/ssl/certs...
+1 added, 0 removed; done.
 
-docker pull harbor.my.local/dojo/ubuntu
-docker images
-
+wget https://cli.run.pivotal.io/stable?release=debian64&source=github
 ```
 
