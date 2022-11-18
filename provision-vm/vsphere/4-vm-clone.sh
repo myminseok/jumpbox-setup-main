@@ -35,9 +35,16 @@ echo ""
 echo "Cloning VM '$VM_NAME' from template '${VM_OVA_TEMPLATE}' ..."
 govc vm.clone --vm="${VM_OVA_TEMPLATE}"  -c $VM_CPU -m $VM_MEM -on=false $VM_NAME
 
+
+
 echo ""
 echo "Current Network adapters of VM '$VM_NAME':"
 govc device.info -vm="$VM_NAME" -json 'ethernet-*'  | jq -r '.Devices[] | .DeviceInfo.Summary'
+
+## change os disk size
+echo "Changing OS disk size  ..."
+OS_DISK_KEY=$(govc device.info --vm=$VM_NAME  --json 'disk-*' | jq -r '.Devices[0].Key')
+govc vm.disk.change --vm=$VM_NAME  -disk.key $OS_DISK_KEY -size ${VM_OS_DISK_GB}G
 
 ## replace new network as default network(ethernet-0). and VM_NETWORK_DEFAULT as additional network.
 MATCHED_VM_NETWORK=$(govc vm.info -json $VM_NAME | \

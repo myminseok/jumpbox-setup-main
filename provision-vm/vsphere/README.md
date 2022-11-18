@@ -15,20 +15,20 @@ following files are required and can be download with the provided scripts. if n
 ## Runbook
 
 ### prepare `vm-deployment.env` and `govc.env` file.
+
 clone this project repo.
+
 ```sh
 cd ~/Downloads
 git clone https://github.com/vmware-tanzu-labs/tanzu-preflight-system
-
-
 ```
+
 go to script directory for the target cloud. for example, following folder for `vsphere` cloud
+
 ```
 cd tanzu-preflight-system/scripts/provision-vm/vsphere
-
 cp -r env-template /tmp/provision-vm-dev
 export ENV_DIR=/tmp/provision-vm-dev
-
 ```
 
 edit `vm-deployment.env` file
@@ -80,7 +80,7 @@ Successfully uploaded the VM template
 it will clone the vm template with VM spec defined in  `vm-deployment.env` file. it will ask `VM name` and `VM network` params to customize optionally.
 - 1 cpu
 - 1 GB mem
-- 10GB VM disk(default)
+- 50GB VM disk(default)
 
 the `VM network` for this VM will be configured for DHCP by default. so make sure this `VM network` has DHCP to get IP assigned properly. 
 ```
