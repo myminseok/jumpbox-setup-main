@@ -23,6 +23,25 @@ sudo docker run hello-world
 sudo docker ps -a
 ```
 
+
+# relocate docker root directory to new mount.
+
+```
+
+cat >/etc/docker/daemon.json << EOF
+{
+  "data-root": "/data/docker"
+}
+EOF
+
+```
+
+```
+sudo rsync -aP /var/lib/docker/ /data/docker
+sudo mv /var/lib/docker /var/lib/docker.old
+sudo service docker start
+```
+
 ### add `docker` group to `ubuntu` user
 ```
 sudo usermod -g docker ubuntu
@@ -75,21 +94,4 @@ apt install python-pip -y
 pip install docker-compose
 ```
 
-# relocate docker root directory to new mount.
-
-```
-
-cat >/etc/docker/daemon.json << EOF
-{
-  "data-root": "/data/docker"
-}
-EOF
-
-```
-
-```
-sudo rsync -aP /var/lib/docker/ /data/docker
-sudo mv /var/lib/docker /var/lib/docker.old
-sudo service docker start
-```
 
