@@ -1,3 +1,7 @@
+```
+apt install net-tools -y
+```
+
 # disk mount
 https://github.com/myminseok/jumpbox-setup-main/blob/main/offline/mount.md
 
