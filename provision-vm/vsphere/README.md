@@ -169,7 +169,7 @@ please note that, To get IP assigned properly, the new NIC should be configured 
   4. apply with command: sudo netplan apply
   5. check the IP assngned: ifconfig
 
-
+Refer to  samples from : https://github.com/myminseok/jumpbox-setup-main/tree/main/ubuntu-static-ip-config/ubuntu/netplan
 
 ### mount disk
 https://github.com/myminseok/pivotal-docs/blob/master/offline/jumpbox.md
