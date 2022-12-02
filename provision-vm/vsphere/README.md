@@ -17,18 +17,11 @@ following files are required and can be download with the provided scripts. if n
 ### prepare `vm-deployment.env` and `govc.env` file.
 
 clone this project repo.
-
-```sh
-cd ~/Downloads
-git clone https://github.com/vmware-tanzu-labs/tanzu-preflight-system
-```
-
 go to script directory for the target cloud. for example, following folder for `vsphere` cloud
 
 ```
-cd tanzu-preflight-system/scripts/provision-vm/vsphere
-cp -r env-template /tmp/provision-vm-dev
-export ENV_DIR=/tmp/provision-vm-dev
+cp -r env-template /tmp/env-dev
+export ENV_DIR=/tmp/env-dev
 ```
 
 edit `vm-deployment.env` file
@@ -172,11 +165,19 @@ please note that, To get IP assigned properly, the new NIC should be configured 
 Refer to  samples from : https://github.com/myminseok/jumpbox-setup-main/tree/main/ubuntu-static-ip-config/ubuntu/netplan
 
 ### mount disk
-https://github.com/myminseok/pivotal-docs/blob/master/offline/jumpbox.md
-
+https://github.com/myminseok/jumpbox-setup-main/blob/main/offline/docker.md
 
 #### Delete VM (9-vm-destroy.sh)
 you may delete VM info with following command.
 ```
 ./9-vm-destroy.sh preflight-jumpbox-mgmt
 ```
+
+
+#### 
+go to script directory for the target cloud. for example, following folder for `vsphere` cloud
+```
+cp -r env-template /tmp/env-dev
+export ENV_DIR=/tmp/env-dev
+```
+
