@@ -99,3 +99,12 @@ Updating certificates in /etc/ssl/certs...
 wget https://cli.run.pivotal.io/stable?release=debian64&source=github
 ```
 
+## docker login fails
+
+```
+Error saving credentials: error storing credentials - err: exit status 1, out: `Cannot autolaunch D-Bus without X11 $DISPLAY`
+```
+```
+sudo apt remove golang-docker-credential-helpers 
+```
+
