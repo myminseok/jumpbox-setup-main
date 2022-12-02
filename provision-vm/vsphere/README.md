@@ -170,7 +170,7 @@ https://github.com/myminseok/jumpbox-setup-main/blob/main/offline/docker.md
 #### Delete VM (9-vm-destroy.sh)
 you may delete VM info with following command.
 ```
-./9-vm-destroy.sh preflight-jumpbox-mgmt
+./9-vm-destroy.sh jumpbox-mgmt
 ```
 
 
