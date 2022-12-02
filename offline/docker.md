@@ -3,19 +3,43 @@
 https://docs.docker.com/engine/install/ubuntu/
 ```
 sudo apt update
-
+```
+```
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
 echo   "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
 
+```
 sudo apt update
-
+```
+```
 sudo apt-get install docker-ce docker-ce-cli containerd.io -y
+```
+
+```
 sudo docker run hello-world
 sudo docker ps -a
+```
 
 
+# relocate docker root directory to new mount.
+
+```
+
+cat >/etc/docker/daemon.json << EOF
+{
+  "data-root": "/data/docker"
+}
+EOF
+
+```
+
+```
+sudo rsync -aP /var/lib/docker/ /data/docker
+sudo mv /var/lib/docker /var/lib/docker.old
+sudo service docker start
 ```
 
 ### add `docker` group to `ubuntu` user
@@ -59,32 +83,16 @@ sudo mv ./kind /usr/local/bin/kind
 
 # docker-compose
 ```
-##  install docker compose
 sudo apt install docker-compose -y
-&& apt remove docker-compose -y
-
-apt install python-pip -y
-# apt install python3-pip 
-
-
+```
+```
+apt install python3-pip -y
+```
+```
 pip install docker-compose
 ```
 
-# relocate docker root directory to new mount.
+# apt remove docker-compose -y
 
-```
-
-cat >/etc/docker/daemon.json << EOF
-{
-  "data-root": "/data/docker"
-}
-EOF
-
-```
-
-```
-sudo rsync -aP /var/lib/docker/ /data/docker
-sudo mv /var/lib/docker /var/lib/docker.old
-sudo service docker start
-```
+# apt install python-pip -y
 
