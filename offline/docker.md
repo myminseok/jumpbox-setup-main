@@ -87,11 +87,14 @@ install docker compose
 sudo apt install docker-compose -y
 && apt remove docker-compose -y
 ```
+
 ```
-apt install python-pip -y
-apt install python3-pip -y
+sudo apt install python3-pip -y
+sudo pip3 install setuptools-rust
+sudo pip3 install --upgrade pip
 ```
+
 ```
-pip install docker-compose
+pip3 install docker-compose
 ```
 
