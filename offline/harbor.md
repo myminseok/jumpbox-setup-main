@@ -64,7 +64,20 @@ sudo chown -R ubuntu:ubuntu /data/
 
 docker-compose up
 ```
-
+## insecure registry
+```
+root@ubuntuguest:/data/harbor-main# cat /etc/docker/daemon.json
+{
+  "data-root": "/data/docker",
+  "insecure-registries": ["infra-harbor2.lab.pcfdemo.net"]
+}
+```
+```
+systemctl restart docker
+```
+```
+journalctl -xe -u docker
+```
 
 # troubleshooting
 
@@ -108,3 +121,10 @@ Error saving credentials: error storing credentials - err: exit status 1, out: `
 sudo apt remove golang-docker-credential-helpers 
 ```
 
+## docker login fails with `failed with status: 401 Unauthorized`
+try on another ssh session
+```
+root@ubuntuguest:/data/harbor-main/harbor# docker login https://infra-harbor2.lab.pcfdemo.net/ -u admin  -p VMware1!
+WARNING! Using --password via the CLI is insecure. Use --password-stdin.
+Error response from daemon: login attempt to https://infra-harbor2.lab.pcfdemo.net/v2/ failed with status: 401 Unauthorized
+```
