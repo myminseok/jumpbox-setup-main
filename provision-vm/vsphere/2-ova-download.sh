@@ -1,8 +1,7 @@
 #!/bin/bash
-## download VM ova.
-
 SCRIPTDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-source $SCRIPTDIR/common.sh
+source $SCRIPTDIR/common-scripts/common.sh
+load_env_file $SCRIPTDIR/../env-template/
 
 VM_OVA_FILE=$(basename $VM_OVA_SOURCE_URL)
 VM_OVA_FILE_PATH=$PATH_TO_DOWNLOAD/$VM_OVA_FILE

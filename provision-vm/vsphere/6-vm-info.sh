@@ -1,6 +1,7 @@
 #!/bin/bash
 SCRIPTDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-source $SCRIPTDIR/common.sh
+source $SCRIPTDIR/common-scripts/common.sh
+load_env_file $SCRIPTDIR/../env-template/
 
 check_executable "govc"
 

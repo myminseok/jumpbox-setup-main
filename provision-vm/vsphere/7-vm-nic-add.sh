@@ -1,7 +1,7 @@
 #!/bin/bash
-
 SCRIPTDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-source $SCRIPTDIR/common.sh
+source $SCRIPTDIR/common-scripts/common.sh
+load_env_file $SCRIPTDIR/../env-template/
 
 if [ "$1" == "-h" ]; then
   echo ""
@@ -27,7 +27,7 @@ if [ -z "$VM_NETWORK" ]; then
 fi
 
 echo ""
-echo "Current Network adapters of VM '$VM_NAME' "
+echo "Current Network adapters of VM '$VM_NAME':"
 govc device.info -vm="$VM_NAME" -json 'ethernet-*'  | jq -r '.Devices[] | .Name, .DeviceInfo'
 
 ## add the new vm network
@@ -39,7 +39,7 @@ if [ "x$MATCHED_VM_NETWORK" == "x" ]; then
   govc vm.network.add -vm="$VM_NAME" -net.adapter=vmxnet3 -net="$VM_NETWORK"
   echo "Successfully Added network: '$VM_NETWORK' "
   echo ""
-  echo "Final Network adapters of VM '$VM_NAME' "
+  echo "Final Network adapters of VM '$VM_NAME':"
   govc device.info -vm="$VM_NAME" -json 'ethernet-*'  | jq -r '.Devices[] | .Name, .DeviceInfo'
   echo ""
   echo "IMPORTANT Follow up Action required: To get IP assigned properly"

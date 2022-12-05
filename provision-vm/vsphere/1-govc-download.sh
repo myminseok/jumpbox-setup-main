@@ -1,7 +1,8 @@
-#!/bin/bash
 ## download govc from https://github.com/vmware/govmomi/releases
+#!/bin/bash
 SCRIPTDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-source $SCRIPTDIR/common.sh
+source $SCRIPTDIR/common-scripts/common.sh
+load_env_file $SCRIPTDIR/../env-template/
 
 if [ "$1" == "-h" ]; then
   echo ""
