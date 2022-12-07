@@ -1,5 +1,5 @@
 
-# install docker engine (option1)
+# install docker engine
 https://docs.docker.com/engine/install/ubuntu/
 ```
 sudo apt update
