@@ -38,27 +38,18 @@ set -x
 govc vm.clone --vm="${VM_OVA_TEMPLATE}"  -c $VM_CPU -m $VM_MEM_MB -on=false $VM_NAME
 set +x
 
-
-echo ""
-echo "Current Network adapters of VM '$VM_NAME':"
-govc device.info -vm="$VM_NAME" -json 'ethernet-*'  | jq -r '.Devices[] | .DeviceInfo.Summary'
-
 ## change os disk size
 echo "Changing OS disk size  ..."
 OS_DISK_KEY=$(govc device.info --vm=$VM_NAME  --json 'disk-*' | jq -r '.Devices[0].Key')
 set -x
 govc vm.disk.change --vm=$VM_NAME  -disk.key $OS_DISK_KEY -size ${VM_OS_DISK_GB}G
 set +x
-## replace new network as default network(ethernet-0). and VM_NETWORK_DEFAULT as additional network.
-MATCHED_VM_NETWORK=$(govc vm.info -json $VM_NAME | \
-jq --arg keyword "$VM_NETWORK_NEW" '.VirtualMachines[].Config.Hardware.Device[] | select (.DeviceInfo.Label | startswith("Network adapter")).DeviceInfo | select(.Summary==$keyword)')
-if [ "x$MATCHED_VM_NETWORK" == "x" ]; then
-  echo ""
-  echo "Replacing Current network to VM '$VM_NETWORK_NEW' (DHCP required to get IP assigned automatically) ..."
-  govc vm.network.change -vm="$VM_NAME" -net.adapter=vmxnet3 -net="$VM_NETWORK_NEW" ethernet-0
-  ## adding VM_NETWORK_DEFAULT as additional network.(mostly for default network connection)
-  source $SCRIPTDIR/7-vm-nic-add.sh "$VM_NAME" "$VM_NETWORK_DEFAULT"
-fi
+
+
+echo ""
+echo "Current Network adapters of VM '$VM_NAME':"
+govc device.info -vm="$VM_NAME" -json 'ethernet-*'  | jq -r '.Devices[] | .DeviceInfo.Summary'
+
 
 ## below code only valid for OVA using cloud-init such as Tanzu OVA(photon, ubuntu)
 ## donot delete '#cloud-config' in the follwing code. otherwise login will fail.
