@@ -1,0 +1,12 @@
+network:
+    ethernets:
+        ens192:
+            dhcp4: true
+            match:
+                macaddress: 00:50:56:96:12:28
+            set-name: ens192
+        ens256:
+            dhcp4: no
+            addresses:
+              - 172.21.128.70/24
+    version: 2

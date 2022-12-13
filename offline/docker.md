@@ -1,5 +1,5 @@
 
-# install docker engine (option1)
+# install docker engine
 https://docs.docker.com/engine/install/ubuntu/
 ```
 sudo apt update
@@ -90,7 +90,11 @@ sudo apt install docker-compose -y
 
 ```
 sudo apt install python3-pip -y
+```
+```
 sudo pip3 install setuptools-rust
+```
+```
 sudo pip3 install --upgrade pip
 ```
 
