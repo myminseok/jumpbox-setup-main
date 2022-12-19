@@ -43,10 +43,12 @@ function replace_json_element {
   eval "jq $1 ${GOVC_OPTION_FILE_PATH}.tmp > ${GOVC_OPTION_FILE_PATH}.tmp1"
   mv ${GOVC_OPTION_FILE_PATH}.tmp1 ${GOVC_OPTION_FILE_PATH}.tmp
 }
+replace_json_element "'.DiskProvisioning=\"thin\"'"
 replace_json_element "'.PowerOn=false'"
 replace_json_element "'.MarkAsTemplate=true'"
 replace_json_element "'.WaitForIP=false'"
 replace_json_element "--arg newValue '$VM_OVA_TEMPLATE' '.Name=\$newValue'"
+
 ## below code only valid for ubuntu-18.04-server-cloudimg-amd64.ova. not for the OVA using cloud-init such as Tanzu OVA(photon, ubuntu)
 if ! is_vmware_tanzu_ova $VM_OVA_TEMPLATE; then
   echo "Additional OVA options such as network, ssh key , password for ubuntu 64-bit Cloud image ..."
