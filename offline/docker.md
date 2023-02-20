@@ -85,9 +85,10 @@ sudo mv ./kind /usr/local/bin/kind
 install docker compose
 ```
 sudo apt install docker-compose -y
-&& apt remove docker-compose -y
 ```
-
+```
+sudo apt remove docker-compose -y
+```
 ```
 sudo apt install python3-pip -y
 ```
