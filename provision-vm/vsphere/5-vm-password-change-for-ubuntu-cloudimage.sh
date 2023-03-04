@@ -15,6 +15,10 @@ fi
 
 echo "Changing password for VM '$VM_NAME'"
 VM_IP=$(govc vm.ip $VM_NAME)
+
+# remove entry from known_hosts
+ssh-keygen -f ~/.ssh/known_hosts -R $VM_IP
+
 eval "$SCRIPTDIR/vm-password-change.expect $VM_IP ubuntu '$VM_PASSWORD_TEMP' '$VM_PASSWORD'"
 echo ""
 
