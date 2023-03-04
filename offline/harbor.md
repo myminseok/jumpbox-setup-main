@@ -2,6 +2,10 @@
 # Harbor( docker-compose)
 
 ## Preerquisites
+- [IMPORTANT] should setup as ROOT and run as root.
+```
+sudo su
+```
 - docker-compose
 ```
 /data/harbor-main/harbor# docker-compose version
@@ -10,10 +14,7 @@ docker-py version: 4.4.4
 CPython version: 2.7.17
 OpenSSL version: OpenSSL 1.1.1  11 Sep 2018
 ```
-- should setup as ROOT and run as root.
-```
-sudo su
-```
+
 
 ## download
 https://github.com/goharbor/harbor/releases
@@ -31,7 +32,7 @@ git clone https://github.com/myminseok/jumpbox-setup-main
 ## generate domain certificates
 
 ```
-cd jumpbox-setup-main/harbor-main/generate-self-signed-cert-new
+cd jumpbox-setup-main/harbor-main/generate-self-signed-cert
 ```
 edit csr.conf
 ```
@@ -45,7 +46,7 @@ and generate.sh
 cp harbor.yml.tmpl harbor.yml
 ```
 
-##  HTTPS 
+##  Configure harbor.yml 
 https://goharbor.io/docs/2.0.0/install-config/configure-https/
 
 ```
@@ -53,9 +54,12 @@ https:
   # https port for harbor, default is 443
   port: 443
   # The path of cert and key files for nginx
-  certificate: /data/harbor-main/generate-self-signed-cert-new/domain.crt
-  private_key: /data/harbor-main/generate-self-signed-cert-new/domain.key
+  certificate: /data/harbor-main/generate-self-signed-cert/domain.crt
+  private_key: /data/harbor-main/generate-self-signed-cert/domain.key
+
+data_volume: /data
 ```
+
 
 ```
 sudo ./install.sh
@@ -69,7 +73,7 @@ docker-compose up
 root@ubuntuguest:/data/harbor-main# cat /etc/docker/daemon.json
 {
   "data-root": "/data/docker",
-  "insecure-registries": ["infra-harbor2.lab.pcfdemo.net"]
+  "insecure-registries": ["infra-harbor.lab.pcfdemo.net"]
 }
 ```
 ```

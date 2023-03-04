@@ -1,3 +1,5 @@
+
+ifconfig
 ```
 apt install net-tools -y
 ```
