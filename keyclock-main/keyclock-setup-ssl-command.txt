@@ -1,0 +1,33 @@
+
+#create certs
+
+#creating keystore 
+keytool -genkeypair -alias myoidc -keyalg RSA -validity 365 -keystore keystore.jks -storepass "VMware1!" -dname "CN=myOrg, OU=dev, O=myCompany, L=Seoul, ST=Seoul, C=KR" -keypass "VMware1!"
+
+keytool -importkeystore -srckeystore keystore.jks -destkeystore keystore.jks -deststoretype pkcs12 
+
+
+#export certs
+#keytool -export -alias myoidc -keystore keystore.jks -rfc -file cert.cer -storepass "VMware1!"
+
+#import certs to  truststore
+keytool -importcert -alias myoidc -file domain.crt -keystore keystore.jks -storepass "VMware1!"  -noprompt
+
+keytool -importcert -alias myoidc -file domain.crt -keystore truststore.jks -storepass "VMware1!" -noprompt
+
+keytool -import -alias myoidc -file domain.crt -keystore truststore.jks -storepass "VMware1!" -noprompt
+
+
+##
+## openssl pkcs12 -export -in domain.crt -inkey domain.key -out domain.p12 -name myoidc
+
+## 
+openssl pkcs12 -export -name myoidc  -in domain.crt -inkey domain.key -CAfile root.crt -out domain.p12 
+
+
+## 
+keytool -importkeystore -srckeystore domain.p12 -srcstoretype PKCS12 -destkeystore keystore.jks
+
+export KEYCLOAK_ADMIN=admin 
+export KEYCLOAK_ADMIN_PASSWORD='VMware1!'
+./keycloak-22.0.0/bin/kc.sh start-dev --https-certificate-file=/data/keyclock/generate-self-signed-cert-keyclock/domain.crt --https-certificate-key-file=/data/keyclock/generate-self-signed-cert-keyclock/domain.key
