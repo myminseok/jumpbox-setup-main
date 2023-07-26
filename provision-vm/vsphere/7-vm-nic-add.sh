@@ -38,30 +38,34 @@ if [ "x$MATCHED_VM_NETWORK" == "x" ]; then
   echo "Adding network: '$VM_NETWORK' "
   govc vm.network.add -vm="$VM_NAME" -net.adapter=vmxnet3 -net="$VM_NETWORK"
   echo "Successfully Added network: '$VM_NETWORK' "
+ 
+else
   echo ""
-  echo "Final Network adapters of VM '$VM_NAME':"
-  govc device.info -vm="$VM_NAME" -json 'ethernet-*'  | jq -r '.Devices[] | .Name, .DeviceInfo'
-  echo ""
-  echo "IMPORTANT Follow up Action required: To get IP assigned properly"
+  echo "Skipping to add network as it exists already: $VM_NETWORK"
+fi 
+
+
+echo ""
+echo "Final Network adapters of VM '$VM_NAME':"
+govc device.info -vm="$VM_NAME" -json 'ethernet-*'  | jq -r '.Devices[] | .Name, .DeviceInfo'
+
+echo ""
+echo ""
+  echo "TIP: Follow up Action required: To get IP assigned properly"
   echo "  1. ssh into the VM and Modify network for this NIC"
   echo "  2. identify device name such as 'ens224' with command: ip link show"
   echo "  3. and set the device with dncp enabled in /etc/netplan/50-cloud-init.yaml"
   echo "
   network:
     ethernets:
-        ens192:
+        ens192: # modify to actual ID
             dhcp4: true
             match:
-                macaddress: 00:50:56:83:1e:58
-            set-name: ens192
+                macaddress: 00:50:56:83:1e:58 # Modify to the actual mac address
+            set-name: ens192 # modify to actual ID
         ens224:
             dhcp4: true
     version: 2
   "
   echo "  4. apply with command: sudo netplan apply "
   echo "  5. check the IP assngned: ifconfig "
-else
-  echo ""
-  echo "Skipping to add network as it exists already: $VM_NETWORK"
-fi 
-

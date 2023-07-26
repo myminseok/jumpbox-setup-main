@@ -35,8 +35,13 @@ fi
 
 VM_SSH_PUBLIC_KEY=$(cat "$VM_SSH_PUBLIC_KEY_FILE_PATH")
 
-echo "Extracting ova spec file ... from $PATH_TO_DOWNLOAD/$VM_OVA_FILE"
+echo "Extracting ova spec file ... from $PATH_TO_DOWNLOAD/$VM_OVA_FILE to ${GOVC_OPTION_FILE_PATH}.tmp"
 govc import.spec $PATH_TO_DOWNLOAD/$VM_OVA_FILE > "${GOVC_OPTION_FILE_PATH}.tmp"
+
+if [ ! -f "${GOVC_OPTION_FILE_PATH}.tmp" ]; then
+  echo "ERROR: file not found: ${GOVC_OPTION_FILE_PATH}.tmp"
+  exit 1
+fi
 
 echo "Generating govc option file ... ${GOVC_OPTION_FILE_PATH}"
 function replace_json_element {

@@ -25,4 +25,4 @@ govc vm.power -off $VM_NAME
 govc vm.power -on $VM_NAME
 govc vm.info -waitip=true $VM_NAME
 
-echo "Successfully Restarting the VM."
+echo "Successfully Restarted the VM."
