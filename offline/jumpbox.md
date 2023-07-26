@@ -1,7 +1,12 @@
+## 
 
-ifconfig
+-  ifconfig
 ```
 apt install net-tools -y
+```
+- hostname
+```
+hostnamectl set-hostname my-jumpbox-2204
 ```
 
 # disk mount
