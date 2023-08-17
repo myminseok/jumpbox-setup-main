@@ -86,6 +86,9 @@ install docker compose
 ```
 sudo apt install docker-compose -y
 ```
+> this prevent error on executing `pip3 install setuptools-rust`
+>> ERROR: launchpadlib 1.10.13 requires testresources, which is not installed.
+
 ```
 sudo apt remove docker-compose -y
 ```
