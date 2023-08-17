@@ -1,7 +1,7 @@
 #!/bin/bash
 SCRIPTDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $SCRIPTDIR/common.sh
-
+set -x
 #ifaces=$(sshpass -p vyos ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q vyos@$VYOS_IP find /sys/class/net -mindepth 1 -maxdepth 1 -not -name lo -printf "%P: " -execdir cat '{}/address' '\;')
 ifaces=$(ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q vyos@$VYOS_VM_IP find /sys/class/net -mindepth 1 -maxdepth 1 -not -name lo -printf "%P: " -execdir cat '{}/address' '\;')
 
@@ -16,6 +16,7 @@ function match_iface(){
   echo ""
 }
 
+set +x
 
 echo "[DEBUG] $ifaces"
 echo ""

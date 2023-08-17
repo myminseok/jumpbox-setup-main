@@ -1,8 +1,11 @@
 #!/bin/bash
 SCRIPTDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+set -x
 source $SCRIPTDIR/common.sh
+set +x
 
-
+echo ""
+echo "configure"
 echo "set service dhcp-server dynamic-dns-update"
 echo "delete service dhcp-server shared-network-name nsx-alb-mgmt-network"
 echo "set service dhcp-server shared-network-name nsx-alb-mgmt-network authoritative"
