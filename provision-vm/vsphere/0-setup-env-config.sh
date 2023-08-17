@@ -9,6 +9,7 @@ if [ -z $1 ]; then
   echo "Usage: $0 /path/to/env-file"
   echo " - /path/to/tap-env-file: it can be existing path to env file or new path."
   echo "   the directory will be created if not exist and env-tempates/* will be copied"
+  echo "   /path/to/env-file path will be saved to ~/.provision_vm_config"
   exit 1
 fi
 
