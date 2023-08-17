@@ -11,5 +11,10 @@ network:
             match:
                 macaddress: 00:50:56:9d:84:fe
             set-name: eth0
+            addresses:
+            - 192.168.0.102/16
+            gateway4: 192.168.0.1
+            nameservers:
+              addresses: [192.168.0.5]
             wakeonlan: true
     version: 2

@@ -4,6 +4,18 @@
 ```
 apt install net-tools -y
 ```
+
+## networking.
+
+reference to 
+- ubuntu-static-ip-config
+- photon-static-ip
+
+check routes
+```
+route add default gw 192.168.0.1
+```
+
 - hostname
 ```
 hostnamectl set-hostname my-jumpbox-2204
