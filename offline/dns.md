@@ -86,8 +86,11 @@ options {
 
         // forwarder... https://www.digitalocean.com/community/tutorials/how-to-configure-bind-as-a-caching-or-forwarding-dns-server-on-ubuntu-14-04
         recursion yes; 
-	//dnssec-validation auto;
-        dnssec-validation no; // for private external dns
+	      
+        // for private external dns
+        //dnssec-validation auto;
+        dnssec-validation no; 
+        
         // for forwarder.
         allow-recursion { any; };
         allow-recursion-on { any; };
