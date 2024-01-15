@@ -81,7 +81,15 @@ chmod +x ./kind
 sudo mv ./kind /usr/local/bin/kind
 ```
 
+
 # docker-compose
+install docker compose
+```
+sudo apt install docker-compose -y
+```
+reboot vm.
+
+# docker-compose( alternative if above way is failing)
 install docker compose
 ```
 sudo apt install docker-compose -y

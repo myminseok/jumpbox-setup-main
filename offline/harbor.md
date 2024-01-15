@@ -16,13 +16,7 @@ OpenSSL version: OpenSSL 1.1.1  11 Sep 2018
 ```
 
 
-## download
-https://github.com/goharbor/harbor/releases
-```
-wget https://github.com/goharbor/harbor/releases/download/v2.3.3/harbor-offline-installer-v2.3.3.tgz
 
-tar xf harbor-offline-installer-v2.3.3.tgz
-```
 
 ## download scripts
 ```
@@ -34,15 +28,26 @@ git clone https://github.com/myminseok/jumpbox-setup-main
 ```
 cd jumpbox-setup-main/harbor-main/generate-self-signed-cert
 ```
+
 edit csr.conf
 ```
-
 CN = pcfdemo.net
 ```
 and generate.sh
 
+
+## download
+https://github.com/goharbor/harbor/releases
+```
+cd jumpbox-setup-main/harbor-main
+wget https://github.com/goharbor/harbor/releases/download/v2.3.3/harbor-offline-installer-v2.3.3.tgz
+wget https://github.com/goharbor/harbor/releases/download/v2.10.0/harbor-offline-installer-v2.10.0.tgz
+tar xf harbor-offline-installer-v2.3.3.tgz
+```
+
 ## harbor.yml
 ```
+cd jumpbox-setup-main/harbor-main/harbor
 cp harbor.yml.tmpl harbor.yml
 ```
 
