@@ -1,4 +1,5 @@
 # for root.crt
+echo "privides root.key, root.crt"
 ##openssl genrsa -out root.key 2048
 ## missing x509 section in result.
 #yes "" | openssl req -new -x509 -days 3650 -extensions v3_ca -key root.key -config openssl-root.conf -out root.csr
