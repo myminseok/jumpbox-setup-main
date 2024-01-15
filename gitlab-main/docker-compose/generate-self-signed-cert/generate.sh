@@ -1,9 +1,9 @@
 # for root.crt
-openssl genrsa -out root.key 2048
+##openssl genrsa -out root.key 2048
 ## missing x509 section in result.
 #yes "" | openssl req -new -x509 -days 3650 -extensions v3_ca -key root.key -config openssl-root.conf -out root.csr
 #openssl x509 -sha256 -req -days 3650 -set_serial 1 -in root.csr -signkey root.key -out root.crt -extfile openssl-root.conf 
-yes "" | openssl req -config openssl-root.conf -key root.key -new -x509 -days 3650 -sha256 -extensions v3_ca -out root.crt
+##yes "" | openssl req -config openssl-root.conf -key root.key -new -x509 -days 3650 -sha256 -extensions v3_ca -out root.crt
 
 
 #for domain.key, domain.csr
