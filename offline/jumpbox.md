@@ -15,7 +15,12 @@ check routes
 ```
 route add default gw 192.168.0.1
 ```
-
+- user
+```
+groupadd ubuntu
+useradd   -s /bin/bash  -m --home-dir=/home/ubuntu -G ubuntu -g ubuntu  ubuntu 
+su - ubuntu
+```
 - hostname
 ```
 hostnamectl set-hostname my-jumpbox-2204
