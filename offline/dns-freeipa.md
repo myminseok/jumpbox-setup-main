@@ -4,9 +4,22 @@
 
 #### setup docker.
 
+#### setup free ipa
 
-#### disable port 53
+You must make sure these network ports are open:
+```
+        TCP Ports:
+                * 80, 443: HTTP/HTTPS
+                * 389, 636: LDAP/LDAPS
+                * 88, 464: kerberos
+                * 53: bind
+        UDP Ports:
+                * 88, 464: kerberos
+                * 53: bind
+                * 123: ntp
+```
 
+disable port 53
 ```
 systemctl disable bind9
 systemctl stop bind9
@@ -15,11 +28,10 @@ systemctl stop bind9
 systemctl disable systemd-resolved.service
 systemctl stop systemd-resolved.service
 ```
-
-#### start free ipa
-
-
+configure
 ```
+
+mkdir -p /root/freeipa-data
 docker run  --rm   --name freeipa-server  -ti  \
         -h ipa.lab.pcfdemo.net -p 53:53/udp -p 53:53  \
         -p 80:80 -p 443:443  -p 389:389  -p 636:636 -p 88:88 -p 464:464 -p 88:88/udp \
@@ -30,26 +42,12 @@ docker run  --rm   --name freeipa-server  -ti  \
 
 
 ### start on boot: add to crontab
+
+script to run as background
 ```
 cat > /root/freeipa.sh <<EOF
 
 #!/bin/bash
-
-# systemctl disable bind9
-# systemctl disable systemd-resolved.service
-# systemctl stop systemd-resolved.service
-#
-#	1. You must make sure these network ports are open:
-#		TCP Ports:
-#		  * 80, 443: HTTP/HTTPS
-#		  * 389, 636: LDAP/LDAPS
-#		  * 88, 464: kerberos
-#		  * 53: bind
-#		UDP Ports:
-#		  * 88, 464: kerberos
-#		  * 53: bind
-#		  * 123: ntp
-
 
 docker run --detach   --rm   --name freeipa-server  -ti  \
         -h ipa.lab.pcfdemo.net -p 53:53/udp -p 53:53  \
@@ -60,7 +58,6 @@ docker run --detach   --rm   --name freeipa-server  -ti  \
 
 EOF
 ```
-
 
 add to crontab to start on boot.
 ```
@@ -84,5 +81,8 @@ add dns records
 ```
 Network Services > DNS> DNS Zones
 ```
-
+test
+```
 dig @192.168.0.5 test.lab.pcfdemo.net
+
+```
