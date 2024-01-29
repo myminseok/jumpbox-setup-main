@@ -19,6 +19,8 @@ route add default gw 192.168.0.1
 ```
 groupadd ubuntu
 useradd   -s /bin/bash  -m --home-dir=/home/ubuntu -G ubuntu -g ubuntu  ubuntu 
+sudo usermod -g docker ubuntu
+
 su - ubuntu
 ```
 - hostname
