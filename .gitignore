@@ -1,5 +1,6 @@
 .DS_Store
 *.tar
+.vscode
 ./minio-main/docker-compose/docker-images/*.tar
 ./velero-main/docker-images/*.tar
 ./velero-main/*.gz
