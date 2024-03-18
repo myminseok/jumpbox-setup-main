@@ -87,14 +87,14 @@ docker run --detach \
   --rm   --name freeipa-server  -ti  \
   -h ipa.lab.pcfdemo.net -p 53:53/udp -p 53:53  \
   -p 80:80 -p 443:443  -p 389:389  -p 636:636 -p 88:88 -p 464:464 -p 88:88/udp \
-  -p 464:464/udp -p 123:123/udp --read-only  \
+  -p 464:464/udp --read-only  \
   --sysctl net.ipv6.conf.all.disable_ipv6=0  -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
   -v /root/freeipa-data:/data:Z  freeipa/freeipa-server:fedora-34-4.9.6
 
 EOF
 ```
 > `/root/freeipa-data` is your directory on jumpbox. `/data:Z` will be on container. such as `/data/etc/named...`
-
+> ntp(123) is not working in freeIPA. so remove `-p 123:123/udp`. setup [ntp](ntp.md)
 
 add to crontab to start on boot.
 ```
@@ -177,6 +177,6 @@ PING e14749.dsce4.akamaiedge.net (104.74.52.45) 56(84) bytes of data.
 ```
 root@ubuntu:~/freeipa-data/etc/named# docker ps
 CONTAINER ID   IMAGE                                    COMMAND                  CREATED         STATUS         PORTS                                                                                                                                                                                                                                                                                                                                                                                                                     NAMES
-2351517086a4   freeipa/freeipa-server:fedora-34-4.9.6   "/usr/local/sbin/init"   6 minutes ago   Up 6 minutes   0.0.0.0:53->53/tcp, :::53->53/tcp, 0.0.0.0:80->80/tcp, 0.0.0.0:53->53/udp, :::80->80/tcp, :::53->53/udp, 0.0.0.0:88->88/udp, :::88->88/udp, 0.0.0.0:88->88/tcp, :::88->88/tcp, 0.0.0.0:389->389/tcp, :::389->389/tcp, 0.0.0.0:443->443/tcp, 0.0.0.0:123->123/udp, :::443->443/tcp, :::123->123/udp, 0.0.0.0:464->464/tcp, :::464->464/tcp, 0.0.0.0:636->636/tcp, 0.0.0.0:464->464/udp, :::636->636/tcp, :::464->464/udp   freeipa-server
+2351517086a4   freeipa/freeipa-server:fedora-34-4.9.6   "/usr/local/sbin/init"   6 minutes ago   Up 6 minutes   0.0.0.0:53->53/tcp, :::53->53/tcp, 0.0.0.0:80->80/tcp, 0.0.0.0:53->53/udp, :::80->80/tcp, :::53->53/udp, 0.0.0.0:88->88/udp, :::88->88/udp, 0.0.0.0:88->88/tcp, :::88->88/tcp, 0.0.0.0:389->389/tcp, :::389->389/tcp, 0.0.0.0:443->443/tcp, :::443->443/tcp, 0.0.0.0:464->464/tcp, :::464->464/tcp, 0.0.0.0:636->636/tcp, 0.0.0.0:464->464/udp, :::636->636/tcp, :::464->464/udp   freeipa-server
 
 ```
