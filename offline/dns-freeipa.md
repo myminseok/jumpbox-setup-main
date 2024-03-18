@@ -36,12 +36,12 @@ mkdir -p /root/freeipa-data
 docker run  --rm   --name freeipa-server  -ti  \
         -h ipa.lab.pcfdemo.net -p 53:53/udp -p 53:53  \
         -p 80:80 -p 443:443  -p 389:389  -p 636:636 -p 88:88 -p 464:464 -p 88:88/udp \
-        -p 464:464/udp -p 123:123/udp --read-only  \
+        -p 464:464/udp --read-only  \
         --sysctl net.ipv6.conf.all.disable_ipv6=0  -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
         -v /root/freeipa-data:/data:Z  freeipa/freeipa-server:fedora-34-4.9.6
 ```
 > `/root/freeipa-data` is your directory on jumpbox. `/data:Z` will be on container. such as `/data/etc/named...`
-
+> ntp(123) is not working in freeIPA. so remove `-p 123:123/udp`. setup [ntp](ntp.md)
 
 
 
