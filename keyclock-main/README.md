@@ -14,17 +14,17 @@ sudo apt-get purge openjdk*
 ```
 
 
-
+```
 mkdir -p /data/keyclock
 cd /data/keyclock
 cp -r /data/jumpbox-main/keyclock-main/* .
-
+```
 
 download keyclock :  https://www.keycloak.org/downloads
 
 wget https://github.com/keycloak/keycloak/releases/download/22.0.5/keycloak-22.0.5.tar.gz
 
-
+```
 generate domain cert: 
 generate-self-signed-cert-keyclock
 
