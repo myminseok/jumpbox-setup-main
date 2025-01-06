@@ -1,10 +1,10 @@
 
 
-## DNS using FreeIPA on ubuntu
+# DNS using FreeIPA on ubuntu
 
-#### setup docker.
+## setup docker.
 
-#### setup free ipa
+### prepare ubuntu
 
 You must make sure these network ports are open:
 ```
@@ -30,25 +30,30 @@ systemctl stop systemd-resolved.service
 ```
 configure
 
-```
-mkdir -p /root/freeipa-data
 
-docker run  --rm   --name freeipa-server  -ti  \
+
+### INSTALL freeipa with docker
+
+mkdir -p /root/freeipa40-data
+
+cat > /root/install-freeipa.sh <<EOF
+```
+docker run    --rm   --name freeipa-server  -ti  \
         -h ipa.lab.pcfdemo.net -p 53:53/udp -p 53:53  \
         -p 80:80 -p 443:443  -p 389:389  -p 636:636 -p 88:88 -p 464:464 -p 88:88/udp \
-        -p 464:464/udp --read-only  \
+        -p 464:464/udp  --read-only -e PASSWORD="VMware1!"  \
         --sysctl net.ipv6.conf.all.disable_ipv6=0  -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
-        -v /root/freeipa-data:/data:Z  freeipa/freeipa-server:fedora-34-4.9.6
+        -v /root/freeipa40-data:/data:Z  freeipa/freeipa-server:fedora-40
 ```
-> `/root/freeipa-data` is your directory on jumpbox. `/data:Z` will be on container. such as `/data/etc/named...`
+> `/root/freeipa40-data` is your directory on jumpbox. `/data:Z` will be on container. such as `/data/etc/named...`
 > ntp(123) is not working in freeIPA. so remove `-p 123:123/udp`. setup [ntp](ntp.md)
 
 
 
-configure dns forwarders
+### configure dns forwarders
 
 ```
-vi /data/freeipa-data/etc/named/ipa-options-ext.conf
+vi /data/freeipa40-data/etc/named/ipa-options-ext.conf
 
 
 /* User customization for BIND named
@@ -75,25 +80,24 @@ allow-recursion-on { any; }; // Add this!!
 
 ``` 
 
-### start on boot: add to crontab
+### start freeipa on boot: add to crontab
 
-script to run as background
+script to run as background. add `--detach ` option.
 ```
 cat > /root/start-freeipa.sh <<EOF
 
 #!/bin/bash
 
-docker run --detach \
-  --rm   --name freeipa-server  -ti  \
-  -h ipa.lab.pcfdemo.net -p 53:53/udp -p 53:53  \
-  -p 80:80 -p 443:443  -p 389:389  -p 636:636 -p 88:88 -p 464:464 -p 88:88/udp \
-  -p 464:464/udp --read-only  \
-  --sysctl net.ipv6.conf.all.disable_ipv6=0  -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
-  -v /root/freeipa-data:/data:Z  freeipa/freeipa-server:fedora-34-4.9.6
+docker run  --detach  --rm   --name freeipa-server  -ti  \
+        -h ipa.lab.pcfdemo.net -p 53:53/udp -p 53:53  \
+        -p 80:80 -p 443:443  -p 389:389  -p 636:636 -p 88:88 -p 464:464 -p 88:88/udp \
+        -p 464:464/udp  --read-only -e PASSWORD="VMware1!"  \
+        --sysctl net.ipv6.conf.all.disable_ipv6=0  -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
+        -v /root/freeipa40-data:/data:Z  freeipa/freeipa-server:fedora-40
 
 EOF
 ```
-> `/root/freeipa-data` is your directory on jumpbox. `/data:Z` will be on container. such as `/data/etc/named...`
+> `/root/freeipa40-data` is your directory on jumpbox. `/data:Z` will be on container. such as `/data/etc/named...`
 > ntp(123) is not working in freeIPA. so remove `-p 123:123/udp`. setup [ntp](ntp.md)
 
 add to crontab to start on boot.
@@ -112,7 +116,7 @@ vi /etc/hosts
 192.168.0.5 ipa.lab.pcfdemo.net
 ```
 
-https://ipa.lab.pcfdemo.net/
+https://ipa.lab.pcfdemo.net/ root / VMware1!
 
 add dns records
 ```
