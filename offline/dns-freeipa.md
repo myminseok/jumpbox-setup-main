@@ -118,6 +118,8 @@ vi /etc/hosts
 
 https://ipa.lab.pcfdemo.net/ root / VMware1!
 
+- You will be required to login with the user admin and the password you created during the installation.
+  
 add dns records
 ```
 Network Services > DNS> DNS Zones
@@ -184,3 +186,8 @@ CONTAINER ID   IMAGE                                    COMMAND                 
 2351517086a4   freeipa/freeipa-server:fedora-34-4.9.6   "/usr/local/sbin/init"   6 minutes ago   Up 6 minutes   0.0.0.0:53->53/tcp, :::53->53/tcp, 0.0.0.0:80->80/tcp, 0.0.0.0:53->53/udp, :::80->80/tcp, :::53->53/udp, 0.0.0.0:88->88/udp, :::88->88/udp, 0.0.0.0:88->88/tcp, :::88->88/tcp, 0.0.0.0:389->389/tcp, :::389->389/tcp, 0.0.0.0:443->443/tcp, :::443->443/tcp, 0.0.0.0:464->464/tcp, :::464->464/tcp, 0.0.0.0:636->636/tcp, 0.0.0.0:464->464/udp, :::636->636/tcp, :::464->464/udp   freeipa-server
 
 ```
+
+## reference
+- https://computingforgeeks.com/install-and-configure-freeipa-server-on-ubuntu/
+- https://computingforgeeks.com/run-freeipa-server-in-docker-podman-containers/
+
