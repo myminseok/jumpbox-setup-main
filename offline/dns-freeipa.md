@@ -6,6 +6,8 @@
 
 ### prepare ubuntu
 
+ssh ubuntu@192.168.0.5
+
 You must make sure these network ports are open:
 ```
         TCP Ports:
