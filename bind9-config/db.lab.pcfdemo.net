@@ -10,9 +10,18 @@ $TTL 604800
  604800 ); Negative Cache TTL
 ;
 @ IN NS lab.pcfdemo.net.
-@ IN A       192.168.0.100
-* IN A       192.168.0.100
-jumpbox IN A       192.168.0.10
+@ IN A       192.168.0.6
+* IN A       192.168.0.6
+jumpbox IN A       192.168.0.6
 vcenter IN A       192.168.0.10
-avi IN A       192.168.0.15
-test IN A       192.168.0.50
+infra-harbor IN A       192.168.0.6
+ldapserver IN A       192.168.0.6
+infra-harbor2 IN A       192.168.0.6
+keyclock IN A       192.168.0.6
+gitlab IN A       192.168.0.6
+avi IN A       192.168.0.16
+*.apps IN A 192.168.0.70
+*.sys IN A 192.168.0.70
+uaa.sys IN A 192.168.0.70
+login.sys IN A 192.168.0.70
+tpsm IN A       192.168.0.6
