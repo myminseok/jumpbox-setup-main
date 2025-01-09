@@ -9,8 +9,6 @@ apt-get update
 
 apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests \ --no-conflicts --no-breaks --no-replaces --no-enhances \ --no-pre-depends bind9 | grep "^\w")
 
-
-
 dpkg -i *.deb
 
 apt install -f
@@ -20,7 +18,23 @@ apt install -f
 ## setup DNS
 
 ```
+
+apt-get update
+apt-get upgrade
+
+
 apt-get install bind9
+
+apt-get reinstall bind9
+
+service bind9 status
+
+systemctl status bind9
+
+systemctl restart named-resolvconf
+systemctl status named-resolvconf
+
+named-resolvconf.service is a disabled or a static unit not running, not starting it.
 ```
 
 #### setup ipv4 for bind9
@@ -29,7 +43,20 @@ vi /etc/default/bind9
 OPTIONS="-4 -u bind"
 ```
 
+vi  /etc/default/named
+```
+#
+# run resolvconf?
+RESOLVCONF=no
+
+# startup options for the server
+OPTIONS="-4 -u bind"
+```
+
+
 #### /etc/bind$ vi db.pcfdemo.net 
+
+
 
 ```
 ;
@@ -177,3 +204,18 @@ sudo netplan apply
 ## Core DNS
 - https://github.com/kubernetes/dns/blob/master/docs/specification.md
 - https://coredns.io/plugins/kubernetes/
+
+
+## update db.root
+
+service bind9 status
+```
+"checkhints: b.root-servers.net/A (170.247.170.2) missing from hints"
+```
+=> update db.root
+
+cd /etc/bind
+
+wget https://www.internic.net/zones/named.root
+
+mv named.root db.root
