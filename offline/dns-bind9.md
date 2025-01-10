@@ -7,11 +7,10 @@ sudo su
 
 apt-get update
 
-apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests \ --no-conflicts --no-breaks --no-replaces --no-enhances \ --no-pre-depends bind9 | grep "^\w")
-
-dpkg -i *.deb
-
-apt install -f
+## no need on ubuntu jammy
+# apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests \ --no-conflicts --no-breaks --no-replaces --no-enhances \ --no-pre-depends bind9 | grep "^\w")
+# dpkg -i *.deb
+# apt install -f
 
 ```
 

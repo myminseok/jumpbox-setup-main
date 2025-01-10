@@ -21,32 +21,33 @@ You must make sure these network ports are open:
                 * 123: ntp
 ```
 
-disable port 53
+
 ```
-systemctl disable bind9
+systemctl enable bind9
 systemctl stop bind9
+systemctl enable systemd-resolved.service
 
-
-systemctl disable systemd-resolved.service
-systemctl stop systemd-resolved.service
 ```
-configure
 
 
+netstat -nlp | grep 53
 
 ### INSTALL freeipa with docker
+
+systemctl start systemd-resolved.service
+
 
 mkdir -p /root/freeipa40-data
 
 cat > /root/install-freeipa.sh <<EOF
-```
 docker run    --rm   --name freeipa-server  -ti  \
         -h ipa.lab.pcfdemo.net -p 53:53/udp -p 53:53  \
         -p 80:80 -p 443:443  -p 389:389  -p 636:636 -p 88:88 -p 464:464 -p 88:88/udp \
         -p 464:464/udp  --read-only -e PASSWORD="VMware1!"  \
         --sysctl net.ipv6.conf.all.disable_ipv6=0  -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
         -v /root/freeipa40-data:/data:Z  freeipa/freeipa-server:fedora-40
-```
+EOF
+
 > `/root/freeipa40-data` is your directory on jumpbox. `/data:Z` will be on container. such as `/data/etc/named...`
 > ntp(123) is not working in freeIPA. so remove `-p 123:123/udp`. setup [ntp](ntp.md)
 
