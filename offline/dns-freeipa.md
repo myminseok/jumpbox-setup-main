@@ -1,6 +1,6 @@
 
-
 # DNS using FreeIPA on ubuntu
+- only for ubuntu 2004. (As of 2025.1, no support 2204)
 
 ## setup docker.
 
@@ -23,18 +23,49 @@ You must make sure these network ports are open:
 
 
 ```
-systemctl enable bind9
+systemctl disable bind9
 systemctl stop bind9
-systemctl enable systemd-resolved.service
+systemctl disable systemd-resolved.service
 
-```
+systemctl stop systemd-resolved.service
 
 
 netstat -nlp | grep 53
 
+
+```
+
+
 ### INSTALL freeipa with docker
 
+```
+update /etc/netplan/ for DNS to 8.8.8.8
+
+netplan apply
+
 systemctl start systemd-resolved.service
+
+systemctl status systemd-resolved.service
+
+
+docker pull freeipa/freeipa-server:fedora-40
+```
+
+freeup port 53
+
+```
+systemctl stop systemd-resolved.service
+
+systemctl status systemd-resolved.service
+
+netstat -nlp | grep 53
+
+```
+
+hostnamectl set-hostname ipa.lab.pcfdemo.net
+vi /etc/hosts
+192.168.0.5 ipa.lab.pcfdemo.net ipa
+
 
 
 mkdir -p /root/freeipa40-data
@@ -53,10 +84,32 @@ EOF
 
 
 
+The IPA Master Server will be configured with:
+Hostname:       ipa.lab.pcfdemo.net
+IP address(es): 172.17.0.2
+Domain name:    lab.pcfdemo.net
+Realm name:     LAB.PCFDEMO.NET
+
+The CA will be configured with:
+Subject DN:   CN=Certificate Authority,O=LAB.PCFDEMO.NET
+Subject base: O=LAB.PCFDEMO.NET
+Chaining:     self-signed
+
+BIND DNS server will be configured to serve IPA domain with:
+Forwarders:       8.8.8.8
+Forward policy:   only
+Reverse zone(s):  No reverse zone
+
+NTP server:	0.ubuntu.pool.ntp.org
+Continue to configure the system with these values? [no]: yes
+
+
+
+
 ### configure dns forwarders
 
 ```
-vi /data/freeipa40-data/etc/named/ipa-options-ext.conf
+vi /root/freeipa40-data/etc/named/ipa-options-ext.conf
 
 
 /* User customization for BIND named
@@ -103,6 +156,9 @@ EOF
 > `/root/freeipa40-data` is your directory on jumpbox. `/data:Z` will be on container. such as `/data/etc/named...`
 > ntp(123) is not working in freeIPA. so remove `-p 123:123/udp`. setup [ntp](ntp.md)
 
+
+
+
 add to crontab to start on boot.
 ```
 chmod +x /root/start-freeipa.sh
@@ -116,7 +172,7 @@ crontab -e
 #### connect to ipa portal.
 ```
 vi /etc/hosts
-192.168.0.5 ipa.lab.pcfdemo.net
+192.168.0.5 ipa.lab.pcfdemo.net ipa
 ```
 
 https://ipa.lab.pcfdemo.net/ root / VMware1!
@@ -194,3 +250,15 @@ CONTAINER ID   IMAGE                                    COMMAND                 
 - https://computingforgeeks.com/install-and-configure-freeipa-server-on-ubuntu/
 - https://computingforgeeks.com/run-freeipa-server-in-docker-podman-containers/
 
+
+
+
+
+cat > /root/install-freeipa.sh <<EOF
+docker run    --rm   --name freeipa-server  -ti  \
+        -h ipa.lab.pcfdemo.net -p 53:53/udp -p 53:53  \
+        -p 80:80 -p 443:443  -p 389:389  -p 636:636 -p 88:88 -p 464:464 -p 88:88/udp \
+        -p 464:464/udp  --read-only -e PASSWORD="VMware1!"  \
+        --sysctl net.ipv6.conf.all.disable_ipv6=0  -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
+        -v /root/freeipa40-data:/data:Z  freeipa-server
+EOF
