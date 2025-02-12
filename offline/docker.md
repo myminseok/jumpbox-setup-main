@@ -3,6 +3,10 @@
 https://docs.docker.com/engine/install/ubuntu/
 ```
 sudo apt update
+
+apt-get upgrade
+
+
 ```
 ```
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
@@ -86,8 +90,30 @@ sudo mv ./kind /usr/local/bin/kind
 install docker compose
 ```
 sudo apt install docker-compose -y
+
+sudo reboot -n
+
 ```
 reboot vm.
+
+
+## test docker-compose
+
+```
+git clone https://github.com/myminseok/nginx-ssl-main.git
+
+cd cd nginx-ssl-main/generate-self-signed-cert 
+
+git submodule init && git submodule update
+
+generate.sh
+
+cd nginx-ssl-main/nginx-docker-compose/
+
+docker-compose up
+
+```
+
 
 # docker-compose( alternative if above way is failing)
 install docker compose

@@ -88,6 +88,19 @@ systemctl restart docker
 journalctl -xe -u docker
 ```
 
+
+## restart on boot
+
+add to crontab to start on boot.
+```
+chmod +x /data/harbor-main/restart-harbor.sh
+
+crontab -e
+
+@reboot  /root/start-freeipa.sh
+```
+
+
 # troubleshooting
 
 ## wget download failure
@@ -137,3 +150,5 @@ root@ubuntuguest:/data/harbor-main/harbor# docker login https://infra-harbor2.la
 WARNING! Using --password via the CLI is insecure. Use --password-stdin.
 Error response from daemon: login attempt to https://infra-harbor2.lab.pcfdemo.net/v2/ failed with status: 401 Unauthorized
 ```
+
+
