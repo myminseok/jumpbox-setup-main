@@ -159,6 +159,23 @@ please note that, To get IP assigned properly, the new NIC should be configured 
     version: 2
 
 ```
+```
+network:
+    ethernets:
+        id0:
+            dhcp4: false
+            dhcp6: false
+            match:
+                macaddress: 00:50:56:9d:84:fe
+            set-name: eth0
+            addresses:
+            - 192.168.0.6/16
+            gateway4: 192.168.0.1
+            nameservers:
+              addresses: [8.8.8.8]
+            wakeonlan: true
+```
+
   4. apply with command: sudo netplan apply
   5. check the IP assngned: ifconfig
 
