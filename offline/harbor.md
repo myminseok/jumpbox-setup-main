@@ -1,7 +1,7 @@
 
 # Harbor( docker-compose)
 
-## Preerquisites
+## Prerequisites
 - [IMPORTANT] should setup as ROOT and run as root.
 ```
 sudo su
@@ -20,18 +20,23 @@ OpenSSL version: OpenSSL 1.1.1  11 Sep 2018
 
 ## download scripts
 ```
+
+sudo su
+
+cd /data
+
 git clone https://github.com/myminseok/jumpbox-setup-main
+
 ```
 
 ## generate domain certificates
 
 ```
-cd jumpbox-setup-main/harbor-main/generate-self-signed-cert
-```
+sudo su
 
-edit csr.conf
-```
-CN = pcfdemo.net
+cp -r data/jumpbox-setup-main/harbor-main /data
+
+cd /data/harbor-main/generate-self-signed-cert
 ```
 and generate.sh
 
@@ -40,14 +45,16 @@ and generate.sh
 https://github.com/goharbor/harbor/releases
 ```
 cd jumpbox-setup-main/harbor-main
-wget https://github.com/goharbor/harbor/releases/download/v2.3.3/harbor-offline-installer-v2.3.3.tgz
+wget https://github.com/goharbor/harbor/releases/download/v2.12.2/harbor-offline-installer-v2.12.2.tgz
 wget https://github.com/goharbor/harbor/releases/download/v2.10.0/harbor-offline-installer-v2.10.0.tgz
-tar xf harbor-offline-installer-v2.3.3.tgz
+tar xf harbor-offline-installer-xxx.tgz
 ```
+
+
 
 ## harbor.yml
 ```
-cd jumpbox-setup-main/harbor-main/harbor
+cd /data/harbor-main/harbor
 cp harbor.yml.tmpl harbor.yml
 ```
 
@@ -55,6 +62,9 @@ cp harbor.yml.tmpl harbor.yml
 https://goharbor.io/docs/2.0.0/install-config/configure-https/
 
 ```
+hostname: infra-harbor.lab.pcfdemo.net
+
+
 https:
   # https port for harbor, default is 443
   port: 443
@@ -62,43 +72,96 @@ https:
   certificate: /data/harbor-main/generate-self-signed-cert/domain.crt
   private_key: /data/harbor-main/generate-self-signed-cert/domain.key
 
-data_volume: /data
+harbor_admin_password:
+
+# The default data volume
+data_volume: /data/harbor-data  #<== will be created automatically after ./install.sh
 ```
 
 
 ```
 sudo ./install.sh
-
-sudo chown -R ubuntu:ubuntu /data/
-
-docker-compose up
 ```
+
+
+```
+docker-compose ps  #<-- if there is error, then check docker-compose.yml format. 
+
+
+cat docker-compose.yml
+version: '2.3'  #<--- add this line on harbor-offline-installer-v2.12.2.tgz
+services:
+  log:
+    image: goharbor/harbor-log:v2.12.2
+```
+
+docker-compose restart
+
+```
+
+
 ## insecure registry
 ```
-root@ubuntuguest:/data/harbor-main# cat /etc/docker/daemon.json
+sudo su
+
+cat >/etc/docker/daemon.json << EOF
 {
   "data-root": "/data/docker",
   "insecure-registries": ["infra-harbor.lab.pcfdemo.net"]
 }
-```
-```
-systemctl restart docker
-```
-```
-journalctl -xe -u docker
+EOF
 ```
 
+
+```
+systemctl restart docker
+
+journalctl -xe -u docker
+
+```
+
+## test image
+
+```
+docker login infra-harbor.lab.pcfdemo.net
+
+docker pull hello-world
+
+docker tag hello-world:latest infra-harbor.lab.pcfdemo.net/library/hello-world:latest
+
+docker push infra-harbor.lab.pcfdemo.net/library/hello-world:latest
+
+docker pull infra-harbor.lab.pcfdemo.net/library/hello-world:latest
+```
 
 ## restart on boot
 
 add to crontab to start on boot.
+
+
+```
+sudo su
+
+
+cat >/data/harbor-main/restart-harbor.sh << EOF
+#!/bin/bash
+
+cd /data/harbor-main/harbor
+docker-compose restart
+
+EOF
+```
+
+
 ```
 chmod +x /data/harbor-main/restart-harbor.sh
 
 crontab -e
 
-@reboot  /root/start-freeipa.sh
+@reboot  /data/harbor-main/restart-harbor.sh
 ```
+
+
 
 
 # troubleshooting
@@ -151,4 +214,8 @@ WARNING! Using --password via the CLI is insecure. Use --password-stdin.
 Error response from daemon: login attempt to https://infra-harbor2.lab.pcfdemo.net/v2/ failed with status: 401 Unauthorized
 ```
 
+
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+Unsupported config option for networks: 'harbor'
+Unsupported config option for services: 'proxy'
 

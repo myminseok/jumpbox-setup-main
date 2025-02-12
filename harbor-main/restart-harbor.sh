@@ -1,6 +1,4 @@
 #!/bin/bash
 
-pushd ./harbor
-docker-compose stop
-docker-compose start
-popd
+cd /data/harbor-main/harbor
+docker-compose restart

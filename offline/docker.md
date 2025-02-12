@@ -115,14 +115,15 @@ docker-compose up
 ```
 
 
-# docker-compose( alternative if above way is failing)
-install docker compose
+# !!!!! WARNING: alternative if above way is failing
+
+WARNING this method doesn't work ubuntu 2004.
+
 ```
 sudo apt install docker-compose -y
 ```
 > this prevent error on executing `pip3 install setuptools-rust`
 >> ERROR: launchpadlib 1.10.13 requires testresources, which is not installed.
-
 ```
 sudo apt remove docker-compose -y
 ```
