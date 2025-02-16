@@ -2,9 +2,9 @@
 ## mount disk temporailry.
 ```
 fdisk -l
-mkfs.ext4 /dev/sdc
+mkfs.ext4 /dev/sdb
 mkdir /data
-mount /dev/sdc /data
+mount /dev/sdb /data
 ```
 ## mount on VM boot
 ```
@@ -25,12 +25,11 @@ reboot -n
 
 ## ssh login 
 
-root@jumpbox:/home/ubuntu# mount | grep store
-pstore on /sys/fs/pstore type pstore (rw,nosuid,nodev,noexec,relatime)
-/dev/sdc on /store type ext4 (rw,relatime)
+root@jumpbox:/home/ubuntu# mount | grep data
+/dev/sdb on /data type ext4 (rw,relatime)
 
 root@jumpbox:/home/ubuntu# df -h | grep store
-/dev/sdc       492G   73M  467G   1% /store
+/dev/sdb       492G   73M  467G   1% /store
 
 
 ```

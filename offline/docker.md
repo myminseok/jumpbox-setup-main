@@ -4,7 +4,7 @@ https://docs.docker.com/engine/install/ubuntu/
 ```
 sudo apt update
 
-apt-get upgrade
+apt-get upgrade -y
 
 
 ```
@@ -102,9 +102,11 @@ reboot vm.
 ```
 git clone https://github.com/myminseok/nginx-ssl-main.git
 
-cd cd nginx-ssl-main/generate-self-signed-cert 
+cd nginx-ssl-main/generate-self-signed-cert 
 
-git submodule init && git submodule update
+git submodule init
+
+git submodule update
 
 generate.sh
 
