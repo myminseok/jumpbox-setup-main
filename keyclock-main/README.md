@@ -15,23 +15,24 @@ sudo apt-get purge openjdk*
 
 
 ```
-mkdir -p /data/keyclock
-cd /data/keyclock
+mkdir -p /data/keyclock-main
+cd /data/keyclock-main
 cp -r /data/jumpbox-main/keyclock-main/* .
 ```
 
 download keyclock :  https://www.keycloak.org/downloads
 
-wget https://github.com/keycloak/keycloak/releases/download/22.0.5/keycloak-22.0.5.tar.gz
+wget https://github.com/keycloak/keycloak/releases/download/22.0.0/keycloak-22.0.0.tar.gz
 
 ```
 generate domain cert: 
 generate-self-signed-cert-keyclock
 
-cat start-kc.sh
+
+cat start-kc-dev.sh
 export KEYCLOAK_ADMIN=admin
 export KEYCLOAK_ADMIN_PASSWORD='VMware1!'
-./keycloak-22.0.0/bin/kc.sh start-dev --https-certificate-file=/data/keyclock/generate-self-signed-cert-keyclock/domain.crt --https-certificate-key-file=/data/keyclock/generate-self-signed-cert-keyclock/domain.key --enable-http=true
+./keycloak-22.0.0/bin/kc.sh start-dev --https-certificate-file=/data/keyclock-main/generate-self-signed-cert-keyclock/domain.crt --https-certificate-key-file=/data/keyclock-main/generate-self-signed-cert-keyclock/domain.key --http-enabled=true
 
 ```
 

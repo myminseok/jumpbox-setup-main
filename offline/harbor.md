@@ -79,11 +79,13 @@ data_volume: /data/harbor-data  #<== will be created automatically after ./insta
 ```
 
 
+as ubuntu
 ```
 sudo ./install.sh
 ```
 
 
+as root
 ```
 docker-compose ps  #<-- if there is error, then check docker-compose.yml format. 
 
