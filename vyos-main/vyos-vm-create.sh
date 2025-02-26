@@ -7,7 +7,7 @@ check_executable "govc"
 set -x
 
 govc vm.create -annotation="TKG Networking Fabric" \
-  -c=2 -iso=FILE/vyos-1.4-rolling-202211120317-amd64.iso \
+  -c=2 -iso=FILE/vyos-1.5-rolling-202502190007-generic-amd64.iso \
   -m=2048 \
   -disk=20GB \
   -net="$VYOS_VM_NETWORK" \

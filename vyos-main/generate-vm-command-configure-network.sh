@@ -27,8 +27,20 @@ if [ -z "$VM_NAME" ]; then
 fi
 
 
+VM_USER=${3}
+if [ -z "$VM_USER" ]; then
+  read -p "Enter VM user name: " VM_USER_READ
+  VM_USER=${VM_USER_READ:-ubuntu}  
+fi
 
-ifaces=$(ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q ubuntu@$VM_IP find /sys/class/net -mindepth 1 -maxdepth 1 -not -name lo -printf "%P: " -execdir cat '{}/address' '\;')
+if [ -z "$VM_USER" ]; then
+   echo "VM_USER is required"
+   exit 1
+fi
+
+
+
+ifaces=$(ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q $VM_USER@$VM_IP find /sys/class/net -mindepth 1 -maxdepth 1 -not -name lo -printf "%P: " -execdir cat '{}/address' '\;')
 
 function match_iface(){
   mac=$1
@@ -72,7 +84,7 @@ echo "              addresses: [10.79.2.5]"
 echo "            match:"
 echo "              macaddress: ..."
 echo ""
-echo "# TKG network config."
+echo "# add new network config below ... "
 
 echo $vm_device_list | \
 for line in $vm_device_list;
