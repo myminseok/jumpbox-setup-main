@@ -1,6 +1,7 @@
 
 
 ## keyclock 
+OIDC, SAML
 
 install java : https://davelogs.tistory.com/71
 
@@ -49,3 +50,25 @@ test: curl https://keyclock.lab.pcfdemo.net:8443/realms/myrealm/.well-known/open
 
 add custom CA to TKG node, OIDC package
 
+
+
+## prepare keyclock users(Tanzu Platform SM)
+https://github.com/myminseok/tanzu-main
+
+keyclock.lab.pcfdemo.net/ admin / VMware1!
+
+myrealm
+Clients> my_client 
+General settings:
+- ClientID: my_client
+- Name: my_client
+- Valid redirect URIs:  /*
+, https://tpsm.lab.pcfdemo.net/auth/login/callback/keyclock (requiers to prevent redirect_uri error)
+Capacity config
+
+
+
+- Client authentication : on
+- Authentication flow: check Standard flow, check Direct access grants
+Credentials
+- Client Authenicator: Client Id and Secret
