@@ -98,7 +98,7 @@ function check_executable {
 ## ubuntu-18.04-server-cloudimg-amd64.ova => false 
 function is_vmware_tanzu_ova {
   VM_OVA_NAME=$1
-  [[ "$VM_OVA_NAME" =~ "vmware"  ]]
+  [[ "$VM_OVA_NAME" =~ "vmware" || "$VM_OVA_NAME" =~ "tanzu"  ]]
 }
 
 function copy_to_dir_if_not_exist {

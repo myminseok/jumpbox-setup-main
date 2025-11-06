@@ -39,12 +39,16 @@ govc vm.clone --vm="${VM_OVA_TEMPLATE}"  -c $VM_CPU -m $VM_MEM_MB -on=false $VM_
 set +x
 
 ## change os disk size
-echo "Changing OS disk size  ..."
-OS_DISK_KEY=$(govc device.info --vm=$VM_NAME  --json 'disk-*' | jq -r '.Devices[0].Key')
-set -x
-govc vm.disk.change --vm=$VM_NAME  -disk.key $OS_DISK_KEY -size ${VM_OS_DISK_GB}G
-set +x
-
+echo ""
+read -p "$2 Changing main OS disk size: Do you want to resize the main os disk to ${VM_OS_DISK_GB}G? (Y/y) " -n 1 -r
+if [[ ! $REPLY =~ ^[Yy]$ ]]
+then
+  echo "Changing main OS disk size  ..."
+  OS_DISK_KEY=$(govc device.info --vm=$VM_NAME  --json 'disk-*' | jq -r '.Devices[0].Key')
+  set -x
+  govc vm.disk.change --vm=$VM_NAME  -disk.key $OS_DISK_KEY -size ${VM_OS_DISK_GB}G
+  set +x
+fi
 
 echo ""
 echo "Current Network adapters of VM '$VM_NAME':"
@@ -52,7 +56,7 @@ govc device.info -vm="$VM_NAME" -json 'ethernet-*'  | jq -r '.Devices[] | .Devic
 
 
 ## below code only valid for OVA using cloud-init such as Tanzu OVA(photon, ubuntu)
-## donot delete '#cloud-config' in the follwing code. otherwise login will fail.
+## do not delete '#cloud-config' in the following code. otherwise login will fail.
 if is_vmware_tanzu_ova $VM_OVA_TEMPLATE; then
   echo "Setting 'ubuntu' as default user using cloud-init ..."
   if [ ! -f "$VM_SSH_PUBLIC_KEY_FILE_PATH" ]; then
