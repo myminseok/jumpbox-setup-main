@@ -33,7 +33,7 @@ generate-self-signed-cert-keyclock
 cat start-kc-dev.sh
 export KEYCLOAK_ADMIN=admin
 export KEYCLOAK_ADMIN_PASSWORD='VMware1!'
-./keycloak-22.0.0/bin/kc.sh start-dev --https-certificate-file=/data/keyclock-main/generate-self-signed-cert-keyclock/domain.crt --https-certificate-key-file=/data/keyclock-main/generate-self-signed-cert-keyclock/domain.key --http-enabled=true
+/data/keyclock-main/keycloak-22.0.0/bin/kc.sh start-dev --https-certificate-file=/data/keyclock-main/generate-self-signed-cert-keyclock/domain.crt --https-certificate-key-file=/data/keyclock-main/generate-self-signed-cert-keyclock/domain.key --http-enabled=true
 
 ```
 
@@ -72,3 +72,27 @@ Capacity config
 - Authentication flow: check Standard flow, check Direct access grants
 Credentials
 - Client Authenicator: Client Id and Secret
+
+
+## add to crontab to start on boot.
+
+cat >/data/keyclock-main/start-kc.sh<<EOF
+#!/bin/bash
+export KEYCLOAK_ADMIN=admin
+export KEYCLOAK_ADMIN_PASSWORD='VMware1!'
+nohup /data/keyclock-main/keycloak-22.0.0/bin/kc.sh start --https-certificate-file=/data/keyclock-main/generate-self-signed-cert-keyclock/domain.crt --https-certificate-key-file=/data/keyclock-main/generate-self-signed-cert-keyclock/domain.key  --hostname-strict-https=false --hostname=keyclock.lab.pcfdemo.net &
+EOF
+
+make sure all absolute path in the script.
+
+chmod +x /data/keyclock-main/start-kc.sh
+
+cat >/etc/cron.d/keyclock<<EOF
+@reboot root /data/keyclock-main/start-kc.sh 2>&1 >> /data/keyclock-main/cron.log
+EOF
+
+
+reboot -n
+
+systemctl status cron
+Dec 19 03:09:10 jumpbox CRON[1052]: (root) CMD (/data/keyclock-main/start-kc.sh 2>&1 >> /data/keyclock-main/cron.log)
