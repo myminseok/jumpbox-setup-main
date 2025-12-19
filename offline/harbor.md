@@ -160,7 +160,7 @@ chmod +x /data/harbor-main/restart-harbor.sh
 
 crontab -e
 
-@reboot  /data/harbor-main/restart-harbor.sh
+@reboot  root /data/harbor-main/restart-harbor.sh
 ```
 
 

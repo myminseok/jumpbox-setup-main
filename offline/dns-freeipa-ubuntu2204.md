@@ -185,7 +185,7 @@ chmod +x /root/start-freeipa.sh
 
 crontab -e
 
-@reboot  /root/start-freeipa.sh
+@reboot  root /root/start-freeipa.sh
 ```
 
 
