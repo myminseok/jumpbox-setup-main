@@ -33,19 +33,6 @@ if [ ! -f "$VM_SSH_PUBLIC_KEY_FILE_PATH" ]; then
   exit 1
 fi
 
-VM_SSH_PUBLIC_KEY=$(cat "$VM_SSH_PUBLIC_KEY_FILE_PATH")
-
-if [ -f "$GOVC_OPTION_FILE_PATH" ]; then
-  echo "Found  govc option file ... ${GOVC_OPTION_FILE_PATH}"
-  VM_OVA_FILE=$(basename $VM_OVA_SOURCE_URL)
-  VM_OVA_FILE_PATH="$PATH_TO_DOWNLOAD/$VM_OVA_FILE"
-  echo "Uploading VM Template $VM_OVA_TEMPLATE"
-  govc import.ova  --options="$GOVC_OPTION_FILE_PATH" $VM_OVA_FILE_PATH
-  echo "Successfully uploaded the VM template"
-  exit 0
-fi
-
-
 echo "Extracting ova spec file ... from $PATH_TO_DOWNLOAD/$VM_OVA_FILE to ${GOVC_OPTION_FILE_PATH}.tmp"
 govc import.spec $PATH_TO_DOWNLOAD/$VM_OVA_FILE > "${GOVC_OPTION_FILE_PATH}.tmp"
 
@@ -65,27 +52,6 @@ replace_json_element "'.MarkAsTemplate=true'"
 replace_json_element "'.WaitForIP=false'"
 replace_json_element "--arg newValue '$VM_OVA_TEMPLATE' '.Name=\$newValue'"
 
-## below code only valid for ubuntu-18.04-server-cloudimg-amd64.ova. not for the OVA using cloud-init such as Tanzu OVA(photon, ubuntu)
-if ! is_vmware_tanzu_ova $VM_OVA_TEMPLATE; then
-  echo "Additional OVA options such as network, ssh key , password for ubuntu 64-bit Cloud image ..."
-  replace_json_element "--arg newValue '$VM_NETWORK' '.NetworkMapping[].Network=\$newValue'"
-  replace_json_element "--arg newValue '$VM_PASSWORD_TEMP'  '.PropertyMapping=[.PropertyMapping[] | if .Key==\"password\" then .Value=\$newValue else . end]'"
-  replace_json_element "--arg newValue '$VM_SSH_PUBLIC_KEY' '.PropertyMapping=[.PropertyMapping[] | if .Key==\"public-keys\" then .Value=\$newValue else . end]'"
-fi
-
-## below is EXPERIMENTAL
-if [[ "$VM_OVA_TEMPLATE" =~ "tanzu-platform" ]] ; then
-  echo "Additional OVA options for tanzu platform appliance ova(ai-services)"
-  replace_json_element "--arg newValue '$VM_NETWORK' '.NetworkMapping[].Network=\$newValue'"
-fi
-
 
 mv ${GOVC_OPTION_FILE_PATH}.tmp ${GOVC_OPTION_FILE_PATH}
 echo "Successfully Generated govc option file: ${GOVC_OPTION_FILE_PATH}"
-
-echo ""
-VM_OVA_FILE=$(basename $VM_OVA_SOURCE_URL)
-VM_OVA_FILE_PATH="$PATH_TO_DOWNLOAD/$VM_OVA_FILE"
-echo "Uploading VM Template $VM_OVA_TEMPLATE"
-govc import.ova  --options="$GOVC_OPTION_FILE_PATH" $VM_OVA_FILE_PATH
-echo "Successfully uploaded the VM template"
