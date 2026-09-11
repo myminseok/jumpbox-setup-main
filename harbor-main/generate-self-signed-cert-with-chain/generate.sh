@@ -15,7 +15,7 @@ openssl req -x509 -new -nodes -config root_ca.conf -days 3650  -key $OUTPUT/root
 chmod 444 $OUTPUT/root_ca_cert.pem
 
 # Create the Intermediate CA
-openssl genpkey -algorithm RSA -out $OUTPUT/intermediate.key.pem  -pkeyopt rsa_keygen_bits:4096 
+openssl genpkey -algorithm RSA -out $OUTPUT/intermediate.key.pem  -pkeyopt rsa_keygen_bits:4096  -quiet
 openssl req -config inter_ca.conf -new -key $OUTPUT/intermediate.key.pem -out $OUTPUT/intermediate.csr.pem
 
 # Sign the Intermediate with the Root CA
@@ -31,7 +31,7 @@ openssl verify -CAfile $OUTPUT/root_ca_cert.pem $OUTPUT/intermediate.cert.pem
 cat $OUTPUT/intermediate.cert.pem $OUTPUT/root_ca_cert.pem > $OUTPUT/ca_chain.cert.pem
 
 #  Issue a Server Certificate
-openssl genpkey -algorithm RSA -out $OUTPUT/server.key.pem -pkeyopt rsa_keygen_bits:2048
+openssl genpkey -algorithm RSA -out $OUTPUT/server.key.pem -pkeyopt rsa_keygen_bits:2048 -quiet
 openssl req -new -key $OUTPUT/server.key.pem -out $OUTPUT/server.csr.pem -config server.conf
 
 # Sign with Intermediate CA
@@ -39,16 +39,16 @@ openssl ca -config inter_ca.conf -days 825 -notext -md sha256 -in $OUTPUT/server
 
 # Verify server cert using CA chain
 openssl verify -CAfile $OUTPUT/ca_chain.cert.pem $OUTPUT/server.cert.pem
-
 echo "\n"
-openssl x509 -text -noout -in $OUTPUT/root_ca_cert.pem
+openssl x509 -noout -issuer -dates -in $OUTPUT/root_ca_cert.pem 
 echo "\n"
-openssl x509 -text -noout -in $OUTPUT/intermediate.cert.pem
+openssl x509 -noout -issuer -dates -in $OUTPUT/intermediate.cert.pem
 echo "\n"
-openssl x509 -text -noout -in $OUTPUT/server.cert.pem
+openssl x509 -noout -issuer -dates -in $OUTPUT/server.cert.pem -ext subjectAltName
 
 
 # clean up
+set +x
 rm -rf $OUTPUT/*_index.txt*
 rm -rf $OUTPUT/*_serial* 
 rm -rf $OUTPUT/1000.pem
