@@ -22,8 +22,8 @@ arch=$(uname -m)
 FILE_TO_DOWNLOAD="govc_${os}_${arch}.tar.gz"
 
 if [ ! -f "$PATH_TO_DOWNLOAD/$FILE_TO_DOWNLOAD" ]; then
-  echo "Downloading file https://github.com/vmware/govmomi/releases/download/v0.29.0/$FILE_TO_DOWNLOAD to $PATH_TO_DOWNLOAD"
-  wget https://github.com/vmware/govmomi/releases/download/v0.29.0/$FILE_TO_DOWNLOAD -P $PATH_TO_DOWNLOAD
+  echo "Downloading file https://github.com/vmware/govmomi/releases/download/v0.55.2/$FILE_TO_DOWNLOAD to $PATH_TO_DOWNLOAD"
+  wget https://github.com/vmware/govmomi/releases/download/v0.55.2/$FILE_TO_DOWNLOAD -P $PATH_TO_DOWNLOAD
   
 fi
 
